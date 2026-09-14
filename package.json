@@ -1,0 +1,9 @@
+{
+  "name": "tmre-experience-zone",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0",
+    "nodemailer": "^6.9.14"
+  }
+}

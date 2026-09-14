@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<title>TMRE Experience Zone</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#EEF0E6;
+  --paper-raised:#F8F9F3;
+  --ink:#1B1E17;
+  --ink-soft:#54574A;
+  --ink-faint:#82856F;
+  --consensus:#9A9C8C;
+  --consensus-bg:#E3E4D8;
+  --signal:#2F49E0;
+  --signal-ink:#20308F;
+  --signal-soft:#E4E8FB;
+  --line:rgba(27,30,23,0.14);
+  --line-soft:rgba(27,30,23,0.08);
+  --good:#2E7D5B;
+  --good-bg:#DFEEE6;
+  --shadow:0 1px 2px rgba(27,30,23,0.06), 0 8px 24px -12px rgba(27,30,23,0.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15170F;
+    --paper-raised:#1D2016;
+    --ink:#ECEEE3;
+    --ink-soft:#ABAE9B;
+    --ink-faint:#787C67;
+    --consensus:#6E7160;
+    --consensus-bg:#282C1F;
+    --signal:#8496FF;
+    --signal-ink:#C4CDFF;
+    --signal-soft:rgba(132,150,255,0.14);
+    --line:rgba(236,238,227,0.14);
+    --line-soft:rgba(236,238,227,0.07);
+    --good:#5FBE93;
+    --good-bg:rgba(95,190,147,0.14);
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15170F;
+  --paper-raised:#1D2016;
+  --ink:#ECEEE3;
+  --ink-soft:#ABAE9B;
+  --ink-faint:#787C67;
+  --consensus:#6E7160;
+  --consensus-bg:#282C1F;
+  --signal:#8496FF;
+  --signal-ink:#C4CDFF;
+  --signal-soft:rgba(132,150,255,0.14);
+  --line:rgba(236,238,227,0.14);
+  --line-soft:rgba(236,238,227,0.07);
+  --good:#5FBE93;
+  --good-bg:rgba(95,190,147,0.14);
+  --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  font-family:'Fraunces', Georgia, serif;
+  font-weight:600;
+  text-wrap:balance;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+.mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+a{color:inherit;}
+img{max-width:100%;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+@media (max-width:720px){.wrap{padding:0 18px;}}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:14px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.brand{display:flex;align-items:baseline;gap:10px;font-family:'Fraunces',serif;}
+.brand b{font-weight:600;font-size:1.05rem;}
+.brand span{font-size:0.72rem;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
+.nav-links{display:flex;gap:28px;font-size:0.88rem;font-weight:500;}
+.nav-links a{text-decoration:none;color:var(--ink-soft);padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s;}
+.nav-links a:hover{color:var(--ink);border-color:var(--signal);}
+.nav-chip{
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:.03em;
+  background:var(--signal-soft);color:var(--signal-ink);border-radius:100px;padding:5px 12px;white-space:nowrap;
+}
+.booth-chip{text-decoration:none;background:var(--signal);color:#fff;transition:opacity .12s;}
+.booth-chip:hover{opacity:0.85;}
+@media (max-width:860px){.booth-chip{display:none;}}
+@media (max-width:720px){.nav-links{display:none;}}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 56px;border-bottom:1px solid var(--line);}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap;margin-bottom:36px;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.74rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--signal-ink);background:var(--signal-soft);border-radius:100px;padding:6px 12px 6px 10px;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--signal);animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+@media (prefers-reduced-motion:reduce){.eyebrow .dot{animation:none;}}
+.draft-tag{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--ink-faint);border:1px solid var(--line);border-radius:100px;padding:5px 11px;}
+.hero h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.06;max-width:15ch;}
+.hero h1 em{font-style:italic;color:var(--signal-ink);}
+.hero-sub{margin-top:18px;max-width:56ch;color:var(--ink-soft);font-size:1.05rem;line-height:1.55;}
+.hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+.btn{
+  font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:0.92rem;
+  border-radius:10px;padding:12px 20px;border:1px solid transparent;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;transition:transform .12s, box-shadow .12s;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--signal);color:#fff;box-shadow:var(--shadow);}
+.btn-primary:hover{box-shadow:0 2px 4px rgba(0,0,0,.12),0 14px 28px -14px var(--signal);}
+:root[data-theme="dark"] .btn-primary,
+:root[data-theme="dark"] .booth-chip{color:#0E1030;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary,:root:not([data-theme="light"]) .booth-chip{color:#0E1030;}}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--signal);color:var(--signal-ink);}
+
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:44px;}
+.stat{background:var(--paper-raised);padding:20px 22px;}
+.stat .num{font-family:'IBM Plex Mono',monospace;font-size:1.9rem;font-weight:600;font-variant-numeric:tabular-nums;}
+.stat .lbl{font-size:0.78rem;color:var(--ink-faint);margin-top:4px;}
+@media (max-width:720px){.stat-row{grid-template-columns:1fr;}}
+
+/* ---------- sections ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line);}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:36px;flex-wrap:wrap;}
+.sec-tag{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
+.sec-head h2{font-size:clamp(1.5rem,2.6vw,2.05rem);margin-top:6px;max-width:20ch;}
+.sec-note{max-width:42ch;color:var(--ink-soft);font-size:0.92rem;line-height:1.5;}
+
+/* ---------- module 1: agenda ---------- */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;align-items:center;}
+.search-box{
+  flex:1;min-width:220px;display:flex;align-items:center;gap:8px;
+  border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper-raised);
+}
+.search-box input{border:none;background:transparent;outline:none;font-family:inherit;font-size:0.92rem;color:var(--ink);width:100%;}
+.search-box input::placeholder{color:var(--ink-faint);}
+.pill{
+  font-size:0.82rem;font-weight:500;border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);
+  border-radius:100px;padding:8px 15px;cursor:pointer;transition:all .12s;white-space:nowrap;
+}
+.pill[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#fff;}
+.pill:hover:not([aria-pressed="true"]){border-color:var(--signal);color:var(--signal-ink);}
+
+.speaker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:44px;}
+.speaker-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.avatar{
+  width:46px;height:46px;border-radius:50%;background:var(--signal-soft);color:var(--signal-ink);
+  display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1rem;
+}
+.avatar-photo{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block;background:var(--signal-soft);}
+.speaker-card h3{font-size:1.02rem;font-weight:600;}
+.speaker-role{font-size:0.82rem;color:var(--ink-soft);}
+.speaker-abs{font-size:0.85rem;color:var(--ink-soft);line-height:1.5;flex:1;}
+.speaker-track{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);}
+
+.session-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.session-row{
+  background:var(--paper-raised);display:grid;grid-template-columns:110px 1fr auto;gap:18px;padding:16px 20px;align-items:center;
+}
+.session-row .time{font-family:'IBM Plex Mono',monospace;font-size:0.82rem;color:var(--ink-soft);}
+.session-row .title{font-weight:600;font-size:0.94rem;}
+.session-row .meta{font-size:0.8rem;color:var(--ink-faint);margin-top:2px;}
+.session-row .badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:.03em;
+  background:var(--consensus-bg);color:var(--ink-soft);border-radius:100px;padding:5px 11px;white-space:nowrap;
+}
+@media (max-width:640px){.session-row{grid-template-columns:1fr;gap:6px;}.session-row .badge{justify-self:start;}}
+.day-group{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px;}
+.day-group:last-child{margin-bottom:0;}
+.day-group .day-sessions{display:flex;flex-direction:column;gap:1px;background:var(--line);}
+.day-summary{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;
+  padding:16px 20px;background:var(--paper-raised);font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;
+  transition:background .12s;
+}
+.day-summary:hover{background:var(--signal-soft);}
+.day-summary::-webkit-details-marker{display:none;}
+.day-summary::marker{content:"";}
+.day-summary .meta-right{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:0.76rem;color:var(--ink-faint);}
+.day-summary .chevron{display:inline-block;transition:transform .15s;font-size:0.7rem;}
+details[open] > .day-summary .chevron{transform:rotate(90deg);}
+
+.sample-note{font-size:0.78rem;color:var(--ink-faint);margin-top:14px;font-style:italic;}
+
+/* ---------- module 2: concierge ---------- */
+.concierge-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+@media (max-width:860px){.concierge-grid{grid-template-columns:1fr;}}
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line-soft);}
+.step:last-child{border-bottom:none;}
+.step-num{
+  font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--signal-ink);background:var(--signal-soft);
+  width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;
+}
+.step h4{font-size:0.94rem;font-weight:600;margin:0 0 4px;}
+.step p{margin:0;font-size:0.86rem;color:var(--ink-soft);line-height:1.5;}
+
+.form-panel{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:28px;}
+.form-panel h3{font-size:1.1rem;margin-bottom:4px;}
+.form-panel .form-sub{font-size:0.85rem;color:var(--ink-soft);margin-bottom:20px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:0.8rem;font-weight:600;margin-bottom:6px;}
+.field input[type="text"],.field input[type="email"]{
+  width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--paper);
+  color:var(--ink);font-family:inherit;font-size:0.9rem;outline:none;
+}
+.field input:focus{border-color:var(--signal);}
+.check-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.check-pill{position:relative;}
+.check-pill input{position:absolute;opacity:0;inset:0;cursor:pointer;}
+.check-pill span{
+  display:block;font-size:0.8rem;border:1px solid var(--line);border-radius:100px;padding:7px 13px;color:var(--ink-soft);
+  transition:all .12s;
+}
+.check-pill input:checked + span{background:var(--signal);border-color:var(--signal);color:#fff;}
+.check-pill input:focus-visible + span{outline:2px solid var(--signal);outline-offset:2px;}
+.submit-row{display:flex;align-items:center;gap:14px;margin-top:22px;}
+.form-msg{font-size:0.82rem;color:var(--good);display:none;align-items:center;gap:6px;}
+.form-msg.show{display:flex;}
+.form-msg::before{content:"✓";}
+
+/* ---------- module 3: contrarian wall ---------- */
+.contrarian-hero{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:18px;padding:32px;margin-bottom:40px;
+  display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;
+}
+@media (max-width:780px){.contrarian-hero{grid-template-columns:1fr;}}
+.claim-obvious{font-family:'Fraunces',serif;font-style:italic;font-size:1.15rem;color:var(--consensus);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--consensus);line-height:1.4;}
+.claim-signal{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;color:var(--signal-ink);margin-top:14px;line-height:1.3;}
+.claim-attr{font-size:0.8rem;color:var(--ink-faint);margin-top:14px;font-family:'IBM Plex Mono',monospace;}
+.rules{display:flex;flex-direction:column;gap:10px;font-size:0.85rem;color:var(--ink-soft);}
+.rules li{list-style:none;display:flex;gap:10px;}
+.rules li::before{content:"→";color:var(--signal);flex-shrink:0;}
+.rules ul{margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+
+.wall-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;}
+@media (max-width:900px){.wall-layout{grid-template-columns:1fr;}}
+.wall-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.wall-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.wall-card .obvious{font-size:0.82rem;color:var(--consensus);text-decoration:line-through;line-height:1.45;}
+.wall-card .signal{font-family:'Fraunces',serif;font-weight:600;font-size:1rem;color:var(--ink);line-height:1.4;}
+.wall-card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--line-soft);}
+.wall-card .who{font-size:0.76rem;color:var(--ink-faint);}
+.vote-btn{
+  display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:100px;
+  padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--ink-soft);cursor:pointer;transition:all .12s;
+}
+.vote-btn:hover{border-color:var(--signal);color:var(--signal-ink);}
+.vote-btn.voted{background:var(--signal-soft);border-color:var(--signal);color:var(--signal-ink);}
+.vote-btn .arrow{transition:transform .12s;}
+.vote-btn.voted .arrow{transform:translateY(-1px);}
+
+.side-panel{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:22px;position:sticky;top:88px;}
+.side-panel h3{font-size:0.95rem;margin-bottom:14px;}
+.weight-split{margin-bottom:18px;}
+.weight-bar{height:6px;border-radius:100px;background:var(--consensus-bg);overflow:hidden;display:flex;}
+.weight-bar span{display:block;height:100%;background:var(--signal);border-radius:100px 0 0 100px;}
+.weight-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--ink-faint);margin-top:6px;letter-spacing:.02em;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--ink-faint);width:18px;}
+.lb-name{flex:1;font-size:0.85rem;}
+.lb-votes{font-family:'IBM Plex Mono',monospace;font-size:0.82rem;color:var(--signal-ink);font-variant-numeric:tabular-nums;}
+.lb-note{font-size:0.76rem;color:var(--ink-faint);margin-top:16px;line-height:1.5;}
+
+.submit-form{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:36px;}
+.submit-form h3{font-size:1.05rem;margin-bottom:16px;}
+textarea{
+  width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--paper);
+  color:var(--ink);font-family:inherit;font-size:0.9rem;outline:none;resize:vertical;min-height:56px;
+}
+textarea:focus{border-color:var(--signal);}
+.toggle-row{display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--ink-soft);margin-bottom:16px;}
+.toggle{position:relative;width:38px;height:22px;border-radius:100px;background:var(--line);flex-shrink:0;cursor:pointer;border:none;padding:0;}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--paper-raised);transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2);}
+.toggle[aria-pressed="true"]{background:var(--signal);}
+.toggle[aria-pressed="true"]::after{transform:translateX(16px);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media (max-width:560px){.two-col{grid-template-columns:1fr;}}
+
+/* ---------- footer ---------- */
+footer{padding:48px 0 64px;}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:36px;}
+@media (max-width:780px){.footer-grid{grid-template-columns:repeat(2,1fr);}}
+.footer-item{border-left:2px solid var(--line);padding-left:14px;}
+.footer-item .when{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--signal-ink);}
+.footer-item .what{font-size:0.85rem;font-weight:600;margin-top:4px;}
+.footer-item.active{border-left-color:var(--signal);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:var(--ink-faint);}
+.footer-link{color:var(--signal-ink);text-decoration:none;font-weight:600;}
+.footer-link:hover{text-decoration:underline;}
+</style>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><b>Experience&nbsp;Zone</b><span>TMRE 2026 · DENVER</span></div>
+    <div class="nav-links">
+      <a href="#agenda">Speaker &amp; Agenda Hub</a>
+      <a href="#concierge">Session Concierge</a>
+      <a href="#wall">Contrarian Wall</a>
+    </div>
+    <div class="nav-chip">OCT 5–7</div>
+    <a href="https://www.convosight.com" target="_blank" rel="noopener" class="nav-chip booth-chip">📍 Booth 437</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="eyebrow"><span class="dot"></span>Live design draft · v2</span>
+      <span class="draft-tag">Real agenda, speakers &amp; photos from schedule.themarketresearchevent.com — Wall + Concierge now save for real</span>
+    </div>
+    <h1>Everyone's chasing the obvious signal. <em>This is where the real one gets found.</em></h1>
+    <p class="hero-sub">One portal for TMRE 2026: the full speaker line-up and agenda, a concierge that pings you the moment your session starts, and the Contrarian Wall — the insight-contest running underneath it all.</p>
+    <div class="hero-actions">
+      <a href="#wall" class="btn btn-primary">Read the Contrarian Wall →</a>
+      <a href="#agenda" class="btn btn-ghost">Browse the agenda</a>
+      <a href="#concierge" class="btn btn-ghost">Get session pings</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num mono" id="cd-launch">–</div><div class="lbl">Days to Contrarian Wall launch · Sep 19</div></div>
+      <div class="stat"><div class="num mono" id="cd-event">–</div><div class="lbl">Days to TMRE Denver · Oct 5–7</div></div>
+      <div class="stat"><div class="num mono" id="cd-submissions">–</div><div class="lbl">Submissions live on the Wall right now</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="agenda">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-tag">Module 01 — Speaker &amp; Agenda Hub</div>
+        <h2>The line-up, searchable by track and time slot.</h2>
+      </div>
+      <p class="sec-note">Pulled live from the official TMRE schedule — 195 confirmed speakers, 157 sessions across three days. This same feed is the single source the Concierge reads from.</p>
+    </div>
+
+    <div class="filters">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity:.5"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.4"/><path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <input id="search" type="text" placeholder="Search speakers, companies or session titles…">
+      </div>
+    </div>
+    <div class="filters" id="track-filters">
+      <button class="pill" data-track="all" aria-pressed="true">All tracks</button>
+    </div>
+
+    <div class="speaker-grid" id="speaker-grid"></div>
+
+    <div class="session-list" id="session-list"></div>
+    <div class="sample-note">Real TMRE 2026 line-up and photos, pulled live from schedule.themarketresearchevent.com. Grouped by day below — click a day to expand it.</div>
+  </div>
+</section>
+
+<section id="concierge">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-tag">Module 02 — Session Concierge</div>
+        <h2>Never miss the talk you actually came for.</h2>
+      </div>
+      <p class="sec-note">Opt in once. Get pinged the moment your session starts, and a short highlight once it wraps.</p>
+    </div>
+
+    <div class="concierge-grid">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><h4>Opt in on the portal</h4><p>Name, email, and the sessions or tracks you care about.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><h4>We load the real agenda</h4><p>Start/end time, room and speaker — the same sheet powering the hub above.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><h4>"Starting now" ping</h4><p>Fires automatically the moment a session you picked begins.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><h4>Post-talk highlight</h4><p>A 3–5 line takeaway lands in your inbox once the session ends.</p></div></div>
+      </div>
+
+      <form class="form-panel" id="concierge-form">
+        <h3>Get session pings</h3>
+        <p class="form-sub">Live — saves your pick and emails you via the Concierge once TMRE starts.</p>
+        <div class="field"><label for="cf-name">Name</label><input id="cf-name" type="text" placeholder="Jordan Ellery" required></div>
+        <div class="field"><label for="cf-email">Email</label><input id="cf-email" type="email" placeholder="you@company.com" required></div>
+        <div class="field">
+          <label>Tracks you want pings for</label>
+          <div class="check-grid">
+            <label class="check-pill"><input type="checkbox" checked><span>AI in Action</span></label>
+            <label class="check-pill"><input type="checkbox"><span>Insights-Driven Strategy &amp; Impact</span></label>
+            <label class="check-pill"><input type="checkbox"><span>New Research Methods</span></label>
+            <label class="check-pill"><input type="checkbox"><span>The Future of Insights</span></label>
+            <label class="check-pill"><input type="checkbox"><span>Human-Powered Insights</span></label>
+            <label class="check-pill"><input type="checkbox"><span>Emerging Consumer Trends</span></label>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button class="btn btn-primary" type="submit">Notify me</button>
+          <span class="form-msg" id="cf-msg">You're in — pings start Oct 5.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="wall">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-tag">Module 03 — The Contrarian Wall</div>
+        <h2>Submit the insight that contradicts the obvious read.</h2>
+      </div>
+      <p class="sec-note">Jury (advisors + clients) and public vote each count for 50% of the final score. Winners announced live at TMRE, Oct 5–7.</p>
+    </div>
+
+    <div class="contrarian-hero">
+      <div>
+        <div class="claim-obvious">"Everyone's calling protein the biggest trend of the year."</div>
+        <div class="claim-signal">It's not. Fiber is what's actually accelerating — and protein is the one starting to plateau.</div>
+        <div class="claim-attr">— Vijay R. · Advisor, sample entry</div>
+      </div>
+      <ul class="rules">
+        <li>One sentence that contradicts the obvious read, plus the sharper insight underneath it</li>
+        <li>Post under your name or anonymously — either way it goes up as a shareable card</li>
+        <li>Jury scores on originality + evidence (50%); the public vote counts equally (50%)</li>
+        <li>Open now through the submission deadline before TMRE — winners revealed on-site</li>
+      </ul>
+    </div>
+
+    <form class="submit-form" id="wall-form">
+      <h3>Submit your contrarian insight</h3>
+      <div class="field"><label for="wf-obvious">The obvious read everyone's repeating</label><textarea id="wf-obvious" placeholder="&quot;Everyone says …&quot;" required></textarea></div>
+      <div class="field"><label for="wf-signal">What the data actually shows</label><textarea id="wf-signal" placeholder="The sharper insight underneath it" required></textarea></div>
+      <div class="two-col">
+        <div class="field"><label for="wf-name">Name</label><input id="wf-name" type="text" placeholder="Your name"></div>
+        <div class="field"><label for="wf-co">Company</label><input id="wf-co" type="text" placeholder="Your company"></div>
+      </div>
+      <div class="toggle-row">
+        <button type="button" class="toggle" id="wf-anon" aria-pressed="false"></button>
+        <span>Post anonymously</span>
+      </div>
+      <div class="submit-row">
+        <button class="btn btn-primary" type="submit">Post to the Wall</button>
+        <span class="form-msg" id="wf-msg">Posted — it's live on the wall below.</span>
+      </div>
+    </form>
+
+    <div class="wall-layout">
+      <div class="wall-feed" id="wall-feed"></div>
+      <div class="side-panel">
+        <h3>Leaderboard</h3>
+        <div class="weight-split">
+          <div class="weight-bar"><span style="width:50%"></span></div>
+          <div class="weight-labels"><span>Jury 50%</span><span>Public 50%</span></div>
+        </div>
+        <div id="leaderboard"></div>
+        <p class="lb-note">Final ranking is jury score and public vote, weighted equally. The tally here is the public half; advisors + clients score the other half on originality and evidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-item active"><div class="when">SEP 14–18</div><div class="what">Lock scope, tools &amp; content</div></div>
+      <div class="footer-item"><div class="when">SEP 19</div><div class="what">Contrarian Wall opens</div></div>
+      <div class="footer-item"><div class="when">SEP 19–OCT 3</div><div class="what">Amplification · Speaker Hub &amp; Concierge go live</div></div>
+      <div class="footer-item"><div class="when">OCT 5–7</div><div class="what">TMRE Denver · winners announced</div></div>
+    </div>
+    <div class="footer-bottom">
+      <span>Brought to you by <a href="https://www.convosight.com" target="_blank" rel="noopener" class="footer-link">Convosight</a> · TMRE 2026 · Design draft v2</span>
+      <span>Come say hi at <strong>Booth 437</strong> for more · informaconnect.com/tmre</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---------- countdown ----------
+  var now = new Date();
+  var launch = new Date(2026,8,19);
+  var event = new Date(2026,9,5);
+  function daysUntil(d){ return Math.max(0, Math.ceil((d - now)/(1000*60*60*24))); }
+  document.getElementById('cd-launch').textContent = daysUntil(launch);
+  document.getElementById('cd-event').textContent = daysUntil(event);
+
+  // ---------- real TMRE 2026 agenda data ----------
+  // Pulled live from schedule.themarketresearchevent.com (195 speakers, 157 sessions, Oct 5-7 2026)
+  var SESSIONS = [{"date":"2026-10-05","day":"MON","start":"7:00am","end":"6:00pm","title":"Badge Pickup","location":"Lobby A","track":"","type":"Registration","speakers":[]},{"date":"2026-10-05","day":"MON","start":"7:30am","end":"8:15am","title":"Breakfast","location":"Hall A Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-05","day":"MON","start":"8:15am","end":"8:25am","title":"Event Welcome","location":"Headliner Stage","track":"General Session","type":"Keynote","speakers":[{"name":"Paul Coxhill","company":"LIONS"}]},{"date":"2026-10-05","day":"MON","start":"8:25am","end":"9:00am","title":"Consumers Lead. Insights Guide. Growth Follows.","location":"Headliner Stage","track":"General Session","type":"Keynote","speakers":[{"name":"Marc Pritchard","company":"Procter & Gamble"},{"name":"Kirti Singh","company":"Procter & Gamble"}]},{"date":"2026-10-05","day":"MON","start":"9:00am","end":"9:20am","title":"Fueling Mile High Fandom","location":"Headliner Stage","track":"General Session","type":"Keynote","speakers":[{"name":"Hailey Sullivan","company":"Denver Broncos"}]},{"date":"2026-10-05","day":"MON","start":"9:20am","end":"10:00am","title":"TMRE Networking Break","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"Aligning Analytics & Insights Track Welcome","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"Emerging Consumer Trends Track Welcome with Burke","location":"Room 702","track":"Emerging Consumer Trends","type":"Session","speakers":[{"name":"Claire Frank","company":"Burke, Inc."}]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"Human-Powered Insights Track Welcome","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"Insights-Driven Strategy & Impact Track Welcome with Ovation MR","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Michel Jones","company":"OvationMR"}]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"New Research Methods Track Welcome","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[]},{"date":"2026-10-05","day":"MON","start":"10:00am","end":"10:10am","title":"Track Welcome","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Josh Nu'u-Steele","company":"Ideally"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"B2B Research 101: Small Samples, Big Stakes","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Renee Neubecker","company":"Motorola Solutions"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"Fast, Wrong, or Both? Reclaiming Accuracy in the Age of AI Marketing","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[{"name":"Thomas Zo\u00ebga Rams\u00f8y","company":"Neurons"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"How KraftHeinz Got Marketers to Love Research Again","location":"Room 711","track":"The Future of Insights","type":"Fireside Chat","speakers":[{"name":"Douglas Healy","company":"The Kraft Heinz Company"},{"name":"Julio Franco","company":"Zappi"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"Panel: The Human Advantage: Making Better Decisions in an Age of Information Abundance","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Alyssa Kearney","company":"Brandtrust"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"Part I: Unlocking What\u2019s Hard to Say: Creative Qualitative Techniques You Can Use Tomorrow","location":"Show Floor","track":"TMRE's Engagement Zone","type":"Double Session","speakers":[{"name":"Jay Zaltzman","company":"QRCA"},{"name":"Sidney Jansons","company":"HelloFresh"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"The Human Knowledge Studio: Rebranding Insights as a Creative Engine for Strategy","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Matthew Frampton","company":"Crayola"}]},{"date":"2026-10-05","day":"MON","start":"10:10am","end":"10:40am","title":"Worth the Night In","location":"Room 702","track":"Emerging Consumer Trends","type":"Session","speakers":[{"name":"Renata Policicio","company":"Warner Bros Discovery"},{"name":"Piril Paker Yagli","company":"Warner Bros. Discovery"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Four Future Scenarios for the Market Research Industry","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Anna Stoesz","company":"University of Minnesota"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Panel: Beyond the AI Hype: How Google and The North Face are moving from AI Experimentation to Impact","location":"","track":"New Research Methods","type":"Session","speakers":[{"name":"Liz Miller","company":"Knit"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Panel: From Numbers to Narrative: Bridging the Gap Between Analytics & Insights","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[{"name":"Jean Shaw","company":"Evernorth Health Services"},{"name":"Gireesh Joshi","company":"Adobe"},{"name":"Reshma Bennur","company":"Comcast"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Part II: Unlocking What\u2019s Hard to Say: Creative Qualitative Techniques You Can Use Tomorrow","location":"Show Floor","track":"TMRE's Engagement Zone","type":"Double Session","speakers":[{"name":"Jay Zaltzman","company":"QRCA"},{"name":"Sidney Jansons","company":"HelloFresh"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Revving Up Growth: How NASCAR Reimagined Brand Tracking for a Competitive Sports Landscape","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Maxwell Miranda","company":"NASCAR"},{"name":"Peter Aschmoneit","company":"quantilope"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"TMRE Unscripted: When Research Conflict with Instincts","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Raina Rusnak","company":"StarKist"},{"name":"Lauren Connelly","company":"StarKist"}]},{"date":"2026-10-05","day":"MON","start":"10:50am","end":"11:20am","title":"Why Packaging Decisions Stall \u2014 And How AI Can Accelerate Smarter Creative Choices","location":"Room 702","track":"Emerging Consumer Trends","type":"Session","speakers":[{"name":"Cliff Kane","company":"EyeSee"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"Decision-Ready or Not? How to Validate Synthetic Data","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Tracy Adams","company":"The ARF"},{"name":"Keith Smith","company":"Marketing Science Institute"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"Fireside Chat: Spread Too Thin? 4 Ways Flora Food Group Makes Consumer Insights Everyone\u2019s Bread and Butter","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Fireside Chat","speakers":[{"name":"Donna Foti","company":"Flora Food Group"},{"name":"Michael Bartels","company":"Stravito"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"Fireside Chat: The Consumerism of Healthcare:  And What Market Research Should Learn from CPG","location":"Room 702","track":"Emerging Consumer Trends","type":"Fireside Chat","speakers":[{"name":"Holly Hertsgaard","company":"Merck"},{"name":"Ngozi Kamalu","company":"Jazz Pharmaceuticals"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"From AI That Explains to AI That Persuades: How Prudential Stopped Asking Which Message Wins \u2014 and Watched It Win","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Kirk Peterson","company":"Prudential Financial"},{"name":"Lara Manuel","company":"Prudential Financial"},{"name":"Reuben Paris","company":"CloudResearch"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"ICN Investigates the Widening Skills Gap: Help Shape Our Next Steps","location":"Show Floor","track":"TMRE's Engagement Zone","type":"Session","speakers":[{"name":"Kahren Kersten","company":"ICN"},{"name":"Z Johnson","company":"ICN"}]},{"date":"2026-10-05","day":"MON","start":"11:30am","end":"12:00pm","title":"What Got You Here Won\u2019t Get You There: Reinventing Innovation for Today\u2019s Consumer Reality","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Matt Nelson","company":"Mintel"},{"name":"Hugo Amos","company":"Mintel"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"How Toyota is Building a Consumer-Centric Insights Engine","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[{"name":"Olaf Lenzmann","company":"Market Logic"},{"name":"Joshua McGinty","company":"Toyota"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"How to Overcome the Five Biggest Challenges in Brand Tracking","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Nico Jaspers","company":"Latana"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"More Signal, Less Spend: Getting The Most from your Research Partnerships","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Chanon Cook","company":"YPulse"},{"name":"Whitney Bauer","company":"e.l.f. Beauty"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"One Factbase, Many Growth Decisions: How Leading Brands Turn Millions of Consumer Conversations into a Reusable Competitive Advantage","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Vicky Nagovan","company":"ZS"},{"name":"Carolyn Tomlinson","company":"Rich Products Corporation"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"Panel: Beyond the Data: Harnessing Human Intuition for Deeper Insights","location":"Room 703","track":"Human-Powered Insights","type":"Panel","speakers":[{"name":"Judges: Renata Policicio","company":"Warner Bros Discovery"},{"name":"Lexie Franchak","company":"Intuit"},{"name":"Douglas Healy","company":"The Kraft Heinz Company"}]},{"date":"2026-10-05","day":"MON","start":"12:10pm","end":"12:40pm","title":"Panel: Strategic Chef, Short Order Kitchen: Staying Strategic When Everything Is Due Friday","location":"Room 702","track":"Emerging Consumer Trends","type":"Fireside Chat","speakers":[{"name":"Judge: Betsy Shaak","company":"Voxpopme"}]},{"date":"2026-10-05","day":"MON","start":"12:40pm","end":"2:00pm","title":"TMRE Networking Lunch","location":"Show Hall","track":"","type":"Networking","speakers":[]},{"date":"2026-10-05","day":"MON","start":"12:40pm","end":"2:00pm","title":"Women in Insights & Marketing Luncheon ** INVITE ONLY","location":"Four Seasons Ballroom 1","track":"","type":"Networking","speakers":[{"name":"Antoinette Staples","company":"McKesson"},{"name":"Bridget Nelson","company":"MassMutual"},{"name":"Jessica Serrano","company":"Bagel Brands"}]},{"date":"2026-10-05","day":"MON","start":"2:00pm","end":"2:15pm","title":"Coolest Brands for Kids - 2026","location":"Room 702","track":"Emerging Consumer Trends","type":"Session","speakers":[{"name":"Audrey Birner","company":"Beano Brain"}]},{"date":"2026-10-05","day":"MON","start":"2:00pm","end":"2:15pm","title":"One-Hour Presentations Are Dead","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Steve Schafer","company":"Brado"}]},{"date":"2026-10-05","day":"MON","start":"2:00pm","end":"2:15pm","title":"TMRE Unscripted: One Evolving World. Eight Consumer Trends","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Niels Neudecker","company":"Human8"}]},{"date":"2026-10-05","day":"MON","start":"2:00pm","end":"2:15pm","title":"The Best of Both Worlds: How AI-Moderated Interviews are Bridging the Qualitative-Quantitative Divide","location":"","track":"New Research Methods","type":"Session","speakers":[]},{"date":"2026-10-05","day":"MON","start":"2:00pm","end":"2:15pm","title":"The New Research Playbook: Where Full Service Meets AI-Assisted DIY","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Meg Ryan","company":"Prodege"},{"name":"Michelle Seguin","company":"Cox Automotive"}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"Fireside Chat: Ask AIMI: Are Participants Comfortable With AI Moderation?","location":"Room 703","track":"Human-Powered Insights","type":"Fireside Chat","speakers":[{"name":"Genevieve Becker","company":"Strella"}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"How Chomps Used Rapid Research Backed by Verified Buyers to Fuel Their Growth","location":"","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Naiqu Sun","company":"Pogo"},{"name":"Matt Kiviat","company":"Chomps"}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"Panel: Decoding Emerging Consumer Behaviors and Preferences","location":"Room 702","track":"Emerging Consumer Trends","type":"Panel","speakers":[{"name":"Judges: Kristen Griffith","company":"The Clorox Company"},{"name":"Sofia Vazquez-Barrios","company":"DSM-Firmenich"},{"name":"Tripp Hughes","company":"Organic Valley"},{"name":"Joel Idelson","company":"TeenVoice"}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"Panel: Leveraging Cutting-Edge Research Methods for Smarter Insights","location":"Room 706","track":"New Research Methods","type":"Panel","speakers":[{"name":"Judges: Romani Patel","company":"Microsoft"},{"name":"Jordan Welling","company":"Tecovas"},{"name":"Bridget Nelson","company":"MassMutual"}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"The New Insights Imperative: Human + AI + Data","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Eli Moore","company":"Burke, Inc."}]},{"date":"2026-10-05","day":"MON","start":"2:25pm","end":"2:55pm","title":"Unlocking Consumer Love: How Danone Built an Always-On Empathy Culture","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[{"name":"Jilleun Eglin","company":"Discuss"},{"name":"Emily Weinstein","company":"Danone"}]},{"date":"2026-10-05","day":"MON","start":"2:55pm","end":"3:25pm","title":"Media Insights Meetup","location":"Show Floor","track":"TMRE's Engagement Zone","type":"Session","speakers":[]},{"date":"2026-10-05","day":"MON","start":"2:55pm","end":"3:25pm","title":"TMRE Networking Break","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-05","day":"MON","start":"3:25pm","end":"3:40pm","title":"Do Richer Personas Improve Synthetic Data Performance? A Fidelity Paradox","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Eric Mercadante","company":"Prolific"}]},{"date":"2026-10-05","day":"MON","start":"3:25pm","end":"3:40pm","title":"Fireside Chat: From Haaland to Ranch: Insights About U.S. Sports Fandom from Broadcasting the FIFA World Cup","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Kristy Bassolino","company":"YouGov"},{"name":"Kym Frank","company":"Fox Corporation"}]},{"date":"2026-10-05","day":"MON","start":"3:25pm","end":"3:40pm","title":"The Handoff: What Creative Teams Need From Insights That a Study Cannot Give Them","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Chris Younger","company":"Ayzenberg Group/Audience Council"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"Culture in Motion: Anticipating Consumer Change with Digital Ethnography","location":"Room 702","track":"Emerging Consumer Trends","type":"Session","speakers":[{"name":"Cheryl Auger","company":"Lux Research"},{"name":"Shilpa Khanna","company":"Clorox"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"Panel: Measuring the Moments that Matter: How to go from Brand Tracking to Fueling Growth","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Panel","speakers":[{"name":"Judge: James 'JT' Turner","company":"Delineate"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"Quantifying the Impact of Beverage Can Enhancements","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Samantha Blackburn","company":"Ball Corporation"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"Reverse Acculturation and the Death of the General Market","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Dr. Jake Beniflah","company":"CSU FULLERTON"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"The Art & Science of Taste Cluster: A Journey Through Qual, Quant & AI","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Tracey Chen","company":"Warner Bros. Discovery"}]},{"date":"2026-10-05","day":"MON","start":"3:50pm","end":"4:20pm","title":"Where Research Meets Analytics: Telling the Story That Matters","location":"Room 707","track":"Aligning Analytics & Insights","type":"Session","speakers":[{"name":"Susan Frazier","company":"Hilton"}]},{"date":"2026-10-05","day":"MON","start":"4:25pm","end":"4:30pm","title":"TMRE Mainstage Welcome","location":"Four Seasons Ballroom 1","track":"General Session","type":"Session","speakers":[{"name":"Antoinette Staples","company":"McKesson"}]},{"date":"2026-10-05","day":"MON","start":"4:30pm","end":"4:45pm","title":"TMRE Keynote: AI Will Bury the Truth. Unless We Stop It","location":"Four Seasons Ballroom 1","track":"General Session","type":"Keynote","speakers":[{"name":"Pamela Forbus","company":"Mondelez International"}]},{"date":"2026-10-05","day":"MON","start":"4:45pm","end":"5:15pm","title":"The Future of Insights Throwdown","location":"Four Seasons Ballroom 1","track":"General Session","type":"Session","speakers":[{"name":"Elizabeth Oates","company":"Molson Coors"},{"name":"Douglas Healy","company":"The Kraft Heinz Company"},{"name":"Misty Flantroy","company":"Owens Corning"},{"name":"Oksana Sobol","company":"The Clorox Company"},{"name":"Charitie Dantis-Gayo","company":"New York Life Insurance Company"},{"name":"Michael Bagalman","company":"Starz"}]},{"date":"2026-10-05","day":"MON","start":"5:15pm","end":"6:15pm","title":"Opening Night Reception","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"7:30am","end":"8:20am","title":"TMRE Breakfast in the Four Seasons Lobby","location":"Four Seasons Lobby","track":"TMRE","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"8:25am","end":"8:30am","title":"TMRE Mainstage Welcome Back","location":"Four Seasons Ballroom 1","track":"General Session","type":"Keynote","speakers":[{"name":"Keynote: Oksana Sobol","company":"The Clorox Company"}]},{"date":"2026-10-06","day":"TUE","start":"8:30am","end":"9:00am","title":"TMRE Keynote: How to Lead with Confidence and Be More Influential","location":"Four Seasons Ballroom 1","track":"General Session","type":"Keynote","speakers":[{"name":"Dr. Amy Cuddy","company":""}]},{"date":"2026-10-06","day":"TUE","start":"9:00am","end":"9:30am","title":"TMRE Keynote: How to Avoid Becoming Irrelevant","location":"Four Seasons Ballroom 1","track":"General Session","type":"Keynote","speakers":[{"name":"Sol Rashidi","company":""}]},{"date":"2026-10-06","day":"TUE","start":"9:30am","end":"10:15am","title":"TMRE Networking Break","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"Foresight & Future Planning Track Welcome with Burke, Inc.","location":"Room 702","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Claire Frank","company":"Burke, Inc."}]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"From Numbers to Narrative Track Welcome","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"Human-Powered Insights Track Welcome","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"Insights-Driven Strategy & Impact Track Welcome","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"Insights-Driven Strategy & Impact Track Welcome with Ovation MR","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Michel Jones","company":"OvationMR"}]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"New Research Methods Track Welcome","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"The Backstage Boardroom Track Welcome","location":"Room 708","track":"The Backstage Boardroom","type":"Session","speakers":[{"name":"David Boyle","company":"Audience Strategies"}]},{"date":"2026-10-06","day":"TUE","start":"10:15am","end":"10:20am","title":"The Future of Insights Track Welcome","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Josh Nu'u-Steele","company":"Ideally"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"Insights Get You in the Game. Recommendations Help You Win.","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Tiffanie Williams","company":"McAfee"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"Insights Get You in the Game. Recommendations Help You Win.","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Tiffanie Williams","company":"McAfee"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"Panel: Driving Innovation and Change **INVITE ONLY","location":"Room 708","track":"The Backstage Boardroom","type":"Panel","speakers":[{"name":"Jennifer Ng","company":"The Trade Desk"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"Skin in the Game: When Participants Pay to Share Their Insights","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Narek Vardanyan","company":"Prelaunch.com"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"The Magical Marriage of Music and Content:  How Music Amplifies and Extends Engagement with TV Shows and Movies","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Iva Kralj-Taylor","company":"Warner Bros. Discovery"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"What Drives Marketing Effectiveness?","location":"Room 702","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Pamela Forbus","company":"Mondelez International"}]},{"date":"2026-10-06","day":"TUE","start":"10:20am","end":"10:50am","title":"What if Marketing's Obsession with What's New Is Causing Us to Overlook What Works?","location":"","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Pamela Forbus","company":"Mondelez International"},{"name":"Stephen Springfield","company":"Evidence Based Marketing Alliance"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"Evolving Research: From Doing It All to Doing It Right **INVITE ONLY","location":"Room 708","track":"The Backstage Boardroom","type":"Session","speakers":[{"name":"Joseph Agostinelli","company":"Morningstar"},{"name":"Sapna Mistry","company":"Insulet Corporation"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"From Insights to Impact: Building a Human-Centered Needs Framework That Drives Decisions","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Delicia Cooney","company":"Newell Brands"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"Insightful Futures: 10 Tips to Secure Your Place in Market Research (Part Deux)","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Misty Flantroy","company":"Owens Corning"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"Panel: Guiding Data to Decisions: Insights That Drive Impact","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Rich Hill","company":"Tunnl"},{"name":"Michael Nevski","company":"Visa"},{"name":"Derek Yueh","company":"LinkedIn"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"Safeguarding Truth in Insights: Outsmarting AI Fraud in Market Research","location":"Room 702","track":"Foresight & Future Planning","type":"Fireside Chat","speakers":[{"name":"Christopher Barnes","company":"Escalent"},{"name":"Anneli Dey","company":"Tremendous"}]},{"date":"2026-10-06","day":"TUE","start":"11:00am","end":"11:30am","title":"When Behavior Changes the Story: Raising the Bar on Brand Health Research","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Michelle Pichman","company":"Numerator"},{"name":"Karen Daenen","company":"Jackson Family Wines"}]},{"date":"2026-10-06","day":"TUE","start":"11:40am","end":"12:10pm","title":"From Portfolio Chaos to Clarity: Designing Brand Architecture with Conjoint & Brand Equity Data","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[{"name":"Lena Tjosvold","company":"Visa"}]},{"date":"2026-10-06","day":"TUE","start":"11:40am","end":"12:10pm","title":"How to Make Insights Move the Business **INVITE ONLY","location":"Room 708","track":"The Backstage Boardroom","type":"Session","speakers":[{"name":"Elizabeth Oates","company":"Molson Coors"}]},{"date":"2026-10-06","day":"TUE","start":"11:40am","end":"12:10pm","title":"Panel: Strategies for Future-Ready Insights","location":"Room 702","track":"Foresight & Future Planning","type":"Panel","speakers":[{"name":"Oksana Sobol","company":"The Clorox Company"}]},{"date":"2026-10-06","day":"TUE","start":"11:40am","end":"12:10pm","title":"Panel: The Power of Many","location":"Room 706","track":"New Research Methods","type":"Panel","speakers":[{"name":"Judges: Justin Fromm","company":"Samsung Ads"},{"name":"Lizzy Martinez","company":"Delta"},{"name":"Elizabeth Clinard","company":"Capital One"}]},{"date":"2026-10-06","day":"TUE","start":"11:40am","end":"12:10pm","title":"The Psychology of Temporary Solutions: Why \u201cQuick Fixes\u201d Stick","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Bart Borkosky","company":"OvationMR"},{"name":"Sarah Haftings","company":"Shurtape Technologies"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"FMI's U.S. Grocery Shopper Trends 2026: Bricks, Clicks and the Evolving Mix","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Steve Markenson","company":"FMI"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"Fireside Chat: What Happens When Research Intelligence Reaches Every Team That Needs It?","location":"Room 706","track":"New Research Methods","type":"Fireside Chat","speakers":[{"name":"Lev Mazin","company":"aytm"},{"name":"Glenn Fleischman","company":"aytm"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"From Context to Conversation: Turning Internet Signals into Sales Intelligence That Wins Meetings","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[{"name":"Jennifer Ng","company":"The Trade Desk"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"How Molson Coors Turned Foresight Into a Business Asset","location":"Room 702","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Sarah Polansky","company":"Dig Insights"},{"name":"Tyler Monroe","company":"Molson Coors Beverage Company"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"Insight or Irrelevance? Who Wins and Who Gets Left Behind in the Age of AI","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Pamela Forbus","company":"Mondelez International"},{"name":"Ed Keller","company":"MRII"}]},{"date":"2026-10-06","day":"TUE","start":"12:20pm","end":"12:50pm","title":"Panel: The Trust Curve: From Doubt to Decision on Synthetic Audiences","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Panel","speakers":[{"name":"Judges: Ben Warner","company":"Electric Twin"},{"name":"Kirsten Kuhnert","company":"Vodafone Three"}]},{"date":"2026-10-06","day":"TUE","start":"12:50pm","end":"1:45pm","title":"TMRE Networking Lunch","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Building Consumer + Dealer Panels \u2013 A Scalable Research Engine","location":"Room 702","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Erika Lagunaviciute","company":"RealTruck"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Consumer Growth Landscape: How Hormel Foods is Driving Consumer-Centricity","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Abby Evans","company":"Hormel Foods"},{"name":"Tom Lawrence","company":"Hormel Foods"},{"name":"Chris Conley","company":"Hormel Foods"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Panel: Built to Be Bought Again\u2014What Emerging Brands Teach Insights Teams About Turning Trial into Loyalty","location":"Room 703","track":"Human-Powered Insights","type":"Panel","speakers":[{"name":"Judges: Jacob Trumbull","company":"Roaring Fork Mill"},{"name":"Jessica Hamel","company":"PlantChi"},{"name":"Travis Zissu","company":"Scale Food Labs"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Panel: Rewiring Insights for an AI-First World","location":"Room 711","track":"The Future of Insights","type":"Panel","speakers":[{"name":"Judges: Kate James","company":"Fidelity Investments"},{"name":"Jenna Santos","company":"Sonos, Inc"},{"name":"Chris Neal","company":"Chadwick Martin Bailey"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Part I: Leadership From Any Seat **INVITE ONLY","location":"Room 708","track":"The Backstage Boardroom","type":"Double Session","speakers":[{"name":"Emily Neville","company":"Rocket"},{"name":"Elizabeth Oates","company":"Molson Coors"},{"name":"Antoinette Staples","company":"McKesson"},{"name":"Nisreen McConkie","company":"PayPal"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"Stop Choosing Between Quant and Qual: A New Model for Mixed Methods Research","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[{"name":"Leigh Smith","company":"Typeform"}]},{"date":"2026-10-06","day":"TUE","start":"2:05pm","end":"2:35pm","title":"The Research Playbook for the Scroll Age","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Jen O'Brien","company":"American Marketing Association"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"Beyond the South Asian Checkbox: Rethinking How We Understand a Global Consumer Community","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Yogesh Chavda","company":"University of South Carolina"},{"name":"Shalini Sahi  (South Asians in Marketing and Insights","company":"SAMI"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"Crayola & Cambri: Are Traditional KPIs & Benchmarks Really Predicting Product Concept Strength?","location":"Room 702","track":"Foresight & Future Planning","type":"Session","speakers":[{"name":"Dani Kamras","company":"Cambri"},{"name":"Matthew Frampton","company":"Crayola"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"Faster Data, Human Edge: The New Skill Set of the AI-Era Researcher","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Angela Kesselman","company":"Indeed"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"How to Identify Insights That Actually Matter in the Age of AI","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"Lore Oxford","company":"Reddit"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"Panel: The Next Evolution: Blending Human Measurement with Synthetic Personas for Deeper Insights","location":"Room 706","track":"New Research Methods","type":"Panel","speakers":[{"name":"Judges: Adelaide Huni","company":"Shell"},{"name":"Cory Cunningham","company":"Colgate-Palmolive"},{"name":"Kathy Lesner","company":"Toluna"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"Part II: Leadership From Any Seat **INVITE ONLY","location":"Room 708","track":"The Backstage Boardroom","type":"Double Session","speakers":[{"name":"Elizabeth Oates","company":"Molson Coors"},{"name":"Emily Neville","company":"Rocket"},{"name":"Antoinette Staples","company":"McKesson"},{"name":"Nisreen McConkie","company":"PayPal"}]},{"date":"2026-10-06","day":"TUE","start":"2:40pm","end":"3:10pm","title":"The Missing Layer: Why Great Analytics Still Fails to Drive Decisions","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[{"name":"Michael Bagalman","company":"Starz"}]},{"date":"2026-10-06","day":"TUE","start":"3:15pm","end":"3:45pm","title":"Always-On Primary Research: A Synthetic-Powered Platform for What You Need to Know Next","location":"Room 703","track":"Human-Powered Insights","type":"Session","speakers":[{"name":"David Gates","company":"PwC"},{"name":"Surya Turlapati","company":"PwC"}]},{"date":"2026-10-06","day":"TUE","start":"3:15pm","end":"3:45pm","title":"More Research, Not Less: How Google Grew Its Insights Mandate with Digital Twins","location":"Room 706","track":"New Research Methods","type":"Session","speakers":[{"name":"Jason Kramer","company":"Focus"},{"name":"Hadley Edwards","company":"Google"}]},{"date":"2026-10-06","day":"TUE","start":"3:15pm","end":"3:45pm","title":"Panel: The Insights Organization of the Future","location":"Room 711","track":"The Future of Insights","type":"Session","speakers":[{"name":"Maria Vallis","company":"Hypothesis Group"}]},{"date":"2026-10-06","day":"TUE","start":"3:15pm","end":"3:45pm","title":"The Iceberg Effect: What Basic Insights Miss","location":"Room 707","track":"From Numbers to Narrative","type":"Session","speakers":[{"name":"Tom Anderson","company":"Langston"},{"name":"Randee Keating","company":"Newell Brands"}]},{"date":"2026-10-06","day":"TUE","start":"3:15pm","end":"3:45pm","title":"What Pornhub Taught Us About the Say-Do Gap","location":"Room 710","track":"Insights-Driven Strategy & Impact","type":"Session","speakers":[{"name":"Nicole Zeng","company":"Dialogue AI"},{"name":"Leelan Farhan","company":"Aylo"}]},{"date":"2026-10-06","day":"TUE","start":"3:45pm","end":"4:15pm","title":"AI Demos","location":"Show Floor","track":"TMRE's Engagement Zone","type":"Session","speakers":[{"name":"Cara Edwards","company":"Toluna"}]},{"date":"2026-10-06","day":"TUE","start":"3:45pm","end":"4:15pm","title":"TMRE Networking Break","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"4:15pm","end":"5:15pm","title":"Headliner","location":"Headliner Stage","track":"General Session","type":"Keynote","speakers":[{"name":"Gabrielle Union","company":"Flawless By Gabrielle Union, Bitsy's and Proudly"}]},{"date":"2026-10-06","day":"TUE","start":"5:15pm","end":"6:00pm","title":"Happy Hour","location":"Show Floor","track":"","type":"Networking","speakers":[]},{"date":"2026-10-06","day":"TUE","start":"7:00pm","end":"10:00pm","title":"Extra Innings Party at Coors Field","location":"Coors Field","track":"","type":"Networking","speakers":[]},{"date":"2026-10-07","day":"WED","start":"8:00am","end":"8:30am","title":"Continental Breakfast","location":"Room 710","track":"AI in Action","type":"Networking","speakers":[]},{"date":"2026-10-07","day":"WED","start":"8:30am","end":"8:40am","title":"Chairperson Welcome","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Kendra Speed","company":"University of South Carolina"}]},{"date":"2026-10-07","day":"WED","start":"8:30am","end":"10:30am","title":"Workshop: Beyond the Deck: Designing Research for Decisions, Not Deliverables","location":"Room 703","track":"TMRE Extended Content","type":"Workshop","speakers":[{"name":"Amberly Miller","company":"Prudential Financial"}]},{"date":"2026-10-07","day":"WED","start":"8:40am","end":"9:10am","title":"KEYNOTE: Turning AI into Real Impact for Marketing and Insights","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Keynote: Shuchi Sarkar","company":"AAA Club Alliance"}]},{"date":"2026-10-07","day":"WED","start":"9:10am","end":"10:00am","title":"Masterclass: From AI Moderated Research to Decision Infrastructure","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Dhruv Guliani","company":"Keplar"},{"name":"Oksana Sobol","company":"The Clorox Company"}]},{"date":"2026-10-07","day":"WED","start":"10:10am","end":"10:20am","title":"AI-Accelerated Insights Track Kick-Off","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Cara Edwards","company":"Toluna"}]},{"date":"2026-10-07","day":"WED","start":"10:10am","end":"10:20am","title":"AI-Accelerated Marketing Track Kick-Off","location":"Room 710","track":"AI in Action","type":"Session","speakers":[]},{"date":"2026-10-07","day":"WED","start":"10:10am","end":"10:20am","title":"Insights in Action Track Kick-Off","location":"Room 710","track":"AI in Action","type":"Session","speakers":[]},{"date":"2026-10-07","day":"WED","start":"10:10am","end":"10:55am","title":"WORKSHOP: The Invisible Shelf: Build Your Agentic Commerce Playbook in 45 Minutes","location":"Room 704","track":"AI in Action","type":"Workshop","speakers":[{"name":"Yogesh Chavda","company":"University of South Carolina"}]},{"date":"2026-10-07","day":"WED","start":"10:20am","end":"11:05am","title":"Lean in With LinkedIn","location":"Room 705","track":"AI in Action","type":"Session","speakers":[{"name":"Derek Yueh","company":"LinkedIn"},{"name":"Alejandro Garcia Medina","company":"LinkedIn"}]},{"date":"2026-10-07","day":"WED","start":"10:20am","end":"11:00am","title":"Roundtable Discussions: AI Wins and Woes: Navigating the Good, the Bad, and the Unexpected","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"James Newswanger","company":"Columbia University"},{"name":"Kajoli Tankha","company":"Microsoft"},{"name":"Kendra Speed","company":"University of South Carolina"},{"name":"David Tiltman","company":"WARC"}]},{"date":"2026-10-07","day":"WED","start":"10:20am","end":"10:50am","title":"The AI-Augmented Researcher: Master the New UXR Toolkit","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Inna Tsirlin","company":"YouTube"}]},{"date":"2026-10-07","day":"WED","start":"11:00am","end":"11:25am","title":"AI in Action Networking Break","location":"","track":"AI in Action","type":"Networking","speakers":[]},{"date":"2026-10-07","day":"WED","start":"11:00am","end":"12:30pm","title":"Workshop: The ART of Being Approximately Right - A B2B Insights Masterclass","location":"Room 703","track":"TMRE Extended Content","type":"Workshop","speakers":[{"name":"Pavi Gupta  (The Insights Exchange","company":"TIEx LLC"},{"name":"Nancy Imbalzano","company":"Alcon"},{"name":"Alex Chapnik","company":"BD"},{"name":"Valerie Hayden","company":"Alcon"}]},{"date":"2026-10-07","day":"WED","start":"11:25am","end":"11:55am","title":"AI That Persuades: What 3,327 AI Conversations Reveal About Changing Consumers\u2019 Minds","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Leib Litman","company":"CloudResearch"}]},{"date":"2026-10-07","day":"WED","start":"11:25am","end":"11:55am","title":"Navigating the Reality of AI in Marketing and Insights","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Julie Rickis","company":"MassMutual"}]},{"date":"2026-10-07","day":"WED","start":"11:25am","end":"11:55am","title":"Synthetic Personas: What to Trust, What to Test, What to Avoid","location":"Room 705","track":"AI in Action","type":"Session","speakers":[{"name":"Arnie Guha","company":"Phase 5"}]},{"date":"2026-10-07","day":"WED","start":"11:25am","end":"12:25pm","title":"Where AI Ends and Researchers Begin: Rethinking the Research Operating Model","location":"Room 704","track":"AI in Action","type":"Session","speakers":[{"name":"Suraj Rajdev","company":"Google"},{"name":"Brian Tatum","company":"Outward Intelligence"}]},{"date":"2026-10-07","day":"WED","start":"12:05pm","end":"12:35pm","title":"Breaking Down the Buzziest Consumer Product Launches of 2026 \u2014 As Told By Verified Buyers","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Dom Wong","company":"Pogo"}]},{"date":"2026-10-07","day":"WED","start":"12:05pm","end":"12:35pm","title":"Escaping the Insanity Loop with Decision Intelligence: Working Decision-Back to Drive Growth","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Oksana Sobol","company":"The Clorox Company"},{"name":"Eugene Roytburg","company":"Cloverpop"}]},{"date":"2026-10-07","day":"WED","start":"12:05pm","end":"12:35pm","title":"Operationalizing AI With Limited Tools","location":"Room 705","track":"AI in Action","type":"Session","speakers":[{"name":"Patrick Ward","company":"Vanguard"}]},{"date":"2026-10-07","day":"WED","start":"12:15pm","end":"1:00pm","title":"Grab and Go Lunch","location":"Room 703","track":"TMRE Extended Content","type":"Networking","speakers":[]},{"date":"2026-10-07","day":"WED","start":"12:45pm","end":"1:15pm","title":"Build Your Own AI-Powered Trends Tracking System","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Carolyn Wei","company":"Meta"}]},{"date":"2026-10-07","day":"WED","start":"12:45pm","end":"1:15pm","title":"Real Data on Synthetic Data: R&D on Reliability and Practice Uses","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Eli Moore","company":"Burke, Inc."},{"name":"Alex Mangoff","company":"Burke, Inc."}]},{"date":"2026-10-07","day":"WED","start":"1:00pm","end":"3:00pm","title":"Workshop: Insight Inflation: What Still Counts as a Cultural Insight in the Age of AI","location":"Room 703","track":"TMRE Extended Content","type":"Workshop","speakers":[{"name":"Robin Karakash","company":"ASICS & Coca-Cola"}]},{"date":"2026-10-07","day":"WED","start":"1:15pm","end":"1:45pm","title":"AI in Action Networking Lunch","location":"Room 710","track":"AI in Action","type":"Networking","speakers":[]},{"date":"2026-10-07","day":"WED","start":"2:45pm","end":"3:15pm","title":"Cut Research Costs With Agentic AI Without Losing Rigor","location":"Room 710","track":"AI in Action","type":"Session","speakers":[{"name":"Erika Lagunaviciute","company":"RealTruck"}]},{"date":"2026-10-07","day":"WED","start":"2:45pm","end":"3:15pm","title":"Decision-Grade Customer Understanding at Decision Pace","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Andrew Cooper","company":"Verve"},{"name":"Rikki Pearce","company":"Verve"}]},{"date":"2026-10-07","day":"WED","start":"3:25pm","end":"3:55pm","title":"The Sensory Fast-Track: How Video Intelligence and Social Personas Move Innovation from Discovery to Validation","location":"Room 709","track":"AI in Action","type":"Session","speakers":[{"name":"Dr. Mansi Patney","company":"Symrise AG"}]}];
+  var SPEAKERS = [{"name":"Tracy Adams","title":"Sr. Director, Research & Insights","company":"The ARF","photo":"https://media.eventapps.techweb.com/speaker/Tracy_Adams_526597_1778876847.jpg"},{"name":"Joseph Agostinelli","title":"Sr. Director of Market Research","company":"Morningstar","photo":"https://media.eventapps.techweb.com/speaker/Joe_Agnostinelli_527827_1778211404.jpg"},{"name":"Maria Amenta","title":"Corporate Vice President - Research","company":"New York Life","photo":"https://media.eventapps.techweb.com/speaker/Maria_Amenta_530365_1788187627.jpg"},{"name":"Hugo Amos","title":"Executive Vice President","company":"Mintel","photo":"https://media.eventapps.techweb.com/speaker/Hugo_Amos_528168_1780543178.jpg"},{"name":"Tom Anderson","title":"Partner","company":"Langston","photo":"https://media.eventapps.techweb.com/speaker/Tom_Anderson_528461_1783699505.jpg"},{"name":"Peter Aschmoneit","title":"Founder & CEO","company":"quantilope","photo":"https://media.eventapps.techweb.com/speaker/Peter_Aschmoneit_528665_1784918231.jpg"},{"name":"Cheryl Auger","title":"Senior Director, Consumer Insights","company":"Lux Research","photo":"https://media.eventapps.techweb.com/speaker/Cheryl_Auger_528082_1778704335.jpg"},{"name":"Michael Bagalman","title":"VP, Business Intelligence & Data Science","company":"Starz","photo":"https://media.eventapps.techweb.com/speaker/MichaelBagalmanHeadshot_527408_1775156902.jpg"},{"name":"Christopher Barnes","title":"President","company":"Escalent","photo":"https://media.eventapps.techweb.com/speaker/Christopher_Barnes_527839_1778270777.jpg"},{"name":"Michael Bartels","title":"Senior Client Development Manager","company":"Stravito","photo":"https://media.eventapps.techweb.com/speaker/Michael_Bartels_530347_1787858644.png"},{"name":"Kristy Bassolino","title":"Account Director","company":"YouGov","photo":"https://media.eventapps.techweb.com/speaker/Kristy_Bassolino_530395_1788185482.jpg"},{"name":"Whitney Bauer","title":"Senior Director, Insights & Voice of Consumer","company":"e.l.f. Beauty","photo":"https://media.eventapps.techweb.com/speaker/Whitney_Bauer_528256_1782251980.jpg"},{"name":"Genevieve Becker","title":"Growth Lead","company":"Strella","photo":"https://media.eventapps.techweb.com/speaker/Genevieve_Headshot_529084_1785953980.jpeg"},{"name":"Dr. Jake Beniflah","title":"Sr Lecturer, Marketing; Founding Editor of JCMS","company":"CSU FULLERTON","photo":"https://media.eventapps.techweb.com/speaker/Jake_Beniflah_527851_1778877071.jpg"},{"name":"Reshma Bennur","title":"Vice President Consumer Research","company":"Comcast","photo":"https://media.eventapps.techweb.com/speaker/Reshma_Bennur_527802_1778877109.jpg"},{"name":"Laura Bird","title":"Global head of Consumer and Shopper Insights","company":"The North Face","photo":"https://media.eventapps.techweb.com/speaker/Laura_Bird_530574_1788963540.jpg"},{"name":"Audrey Birner","title":"US Insights VP","company":"Beano Brain","photo":"https://media.eventapps.techweb.com/speaker/Audrey_Birner_528834_1785524516.png"},{"name":"Samantha Blackburn","title":"Manager, Global Consumer Insights","company":"Ball Corporation","photo":"https://media.eventapps.techweb.com/speaker/Sam_Headshot_1772472482.jpg"},{"name":"Bart Borkosky","title":"Chief Research Officer","company":"OvationMR","photo":"https://media.eventapps.techweb.com/speaker/Bart_Borkosky_527829_1778878647.jpg"},{"name":"David Boyle","title":"Founder","company":"Audience Strategies","photo":"https://media.eventapps.techweb.com/speaker/David_Boyle_530363_1787932842.jpg"},{"name":"Molly Bullock","title":"Director of Print Insights","company":"HP","photo":"https://media.eventapps.techweb.com/speaker/Molly_Bullock_528666_1784918692.jpg"},{"name":"Gabe Chapman","title":"Director,  Beverages United States Innovation Insights, PepsiCo","company":"PepsiCo","photo":"https://media.eventapps.techweb.com/speaker/Gabe_Chapman_530798_1789398275.jpeg"},{"name":"Alex Chapnik","title":"Global Head, Customer Insights & Analytics","company":"BD","photo":"https://media.eventapps.techweb.com/speaker/Alex_Chapnik_528206_1781111387.jpg"},{"name":"Yogesh Chavda","title":"Former Director, Center for Marketing Solutions","company":"University of South Carolina","photo":"https://media.eventapps.techweb.com/speaker/Yogesh_Chavda_527789_1777907685.jpg"},{"name":"Tracey Chen","title":"Executive Director Global Corporate Research","company":"Warner Bros. Discovery","photo":"https://media.eventapps.techweb.com/speaker/Tracy_Chen_527634_1776439789.png"},{"name":"Jessica Cilla","title":"VP, Consumer & Market Insights","company":"e.l.f. Beauty","photo":"https://media.eventapps.techweb.com/speaker/Jessica_Cilla_530796_1789396582.jpg"},{"name":"Elizabeth Clinard","title":"Senior Director of Credit Card Insights","company":"Capital One","photo":"https://media.eventapps.techweb.com/speaker/Elizabeth_Clinard_530202_1786987623.jpeg"},{"name":"Chris Conley","title":"Sr Insights Manager","company":"Hormel Foods","photo":"https://media.eventapps.techweb.com/speaker/Chris_Conley_526522_1778878814.jpg"},{"name":"Lauren Connelly","title":"Brand Manager","company":"StarKist","photo":"https://media.eventapps.techweb.com/speaker/Lauren_Connelly_526374_1778879087.jpg"},{"name":"Chanon Cook","title":"Chief Research Officer, Head of  Custom Research Studio, YPulse","company":"YPulse","photo":"https://media.eventapps.techweb.com/speaker/Chanon_Cook_527821_1778206749.jpg"},{"name":"Delicia Cooney","title":"Senior Director, Consumer Insights","company":"Newell Brands","photo":"https://media.eventapps.techweb.com/speaker/Delicia_Cooney_Headshot_2025v2_1772490001.png"},{"name":"Andrew Cooper","title":"CEO & Founder","company":"Verve","photo":"https://media.eventapps.techweb.com/speaker/Andrew_Cooper_530333_1787847777.png"},{"name":"Paul Coxhill","title":"Chief Operating Officer & President","company":"LIONS","photo":"https://media.eventapps.techweb.com/speaker/Paul_Coxhill_523916_1755910905.png"},{"name":"Dr. Amy Cuddy","title":"Social Psychologist & Bestselling Author","company":"","photo":"https://media.eventapps.techweb.com/speaker/Amy_Cuddy_527853_1778879306.png"},{"name":"Cory Cunningham","title":"Director, Oral Care Insights","company":"Colgate-Palmolive","photo":"https://media.eventapps.techweb.com/speaker/Cory_Cunninham_530327_1787777556.jpg"},{"name":"James Cuthbertson","title":"CRO","company":"Relative Insight","photo":"https://media.eventapps.techweb.com/speaker/James_Cuthbertson_528602_1784643537.jpg"},{"name":"Karen Daenen","title":"VP, Consumer Insights","company":"Jackson Family Wines","photo":"https://media.eventapps.techweb.com/speaker/Karen_Daenen_530793_1789395268.png"},{"name":"Charitie Dantis-Gayo","title":"Corporate Vice President, Market Research & Insights","company":"New York Life Insurance Company","photo":"https://media.eventapps.techweb.com/speaker/Charitie_Dantis_Gayo_528091_1778879598.jpg"},{"name":"Anneli Dey","title":"Product Marketing Manager","company":"Tremendous","photo":"https://media.eventapps.techweb.com/speaker/Anneli_Day_530349_1787860726.jpeg"},{"name":"Aneesh Dhawan","title":"CEO and Co-Founder","company":"Knit","photo":"https://media.eventapps.techweb.com/speaker/Aneesh_Dhawan_530572_1788963023.jpeg"},{"name":"Cara Edwards","title":"Vice President, Agile Research & AI Specialist, Americas","company":"Toluna","photo":"https://media.eventapps.techweb.com/speaker/CaraEdwards_crop_530517_1788874106.jpg"},{"name":"Hadley Edwards","title":"Head of Market Research & Insights,  Cloud Marketing, Google","company":"Google","photo":"https://media.eventapps.techweb.com/speaker/HadleyEdwards_530449_1788358861.jpg"},{"name":"Jilleun Eglin","title":"Executive Director of Product","company":"Discuss","photo":"https://media.eventapps.techweb.com/speaker/Jilleun_Eglin_530299_1787679425.png"},{"name":"Abby Evans","title":"Sr Insights Manager","company":"Hormel Foods","photo":"https://media.eventapps.techweb.com/speaker/Abby_Evans_526520_1778882730.png"},{"name":"Leelan Farhan","title":"Lead UX Researcher","company":"Aylo","photo":"https://media.eventapps.techweb.com/speaker/Leelan_Farhan_530478_1788454757.png"},{"name":"Shirley Felix","title":"VP, Client Partner","company":"Toluna","photo":"https://media.eventapps.techweb.com/speaker/Shirley_Felix_528203_1781110151.jpg"},{"name":"Misty Flantroy","title":"Director, Products and Systems","company":"Owens Corning","photo":"https://media.eventapps.techweb.com/speaker/Misty_Flantroy2_527825_1785870271.jpg"},{"name":"Glenn Fleischman","title":"CRO","company":"aytm","photo":"https://media.eventapps.techweb.com/speaker/Glenn_Fleischman_530185_1786729005.png"},{"name":"Pamela Forbus","title":"SVP, Global Chief of Insights & Analytics","company":"Mondelez International","photo":"https://media.eventapps.techweb.com/speaker/Pamela_Forbus_527816_1778200304.jpg"},{"name":"Donna Foti","title":"Director Consumer and Market Insights","company":"Flora Food Group","photo":"https://media.eventapps.techweb.com/speaker/Donna_Foti_530346_1787858633.jpeg"},{"name":"Matthew Frampton","title":"Senior Director, Global Human Knowledge Studio","company":"Crayola","photo":"https://media.eventapps.techweb.com/speaker/Matt_Frampton_528073_1778693177.jpg"},{"name":"Lexie Franchak","title":"Staff Market Research Manager","company":"Intuit","photo":"https://media.eventapps.techweb.com/speaker/Lexie_Franchak_527849_1778274883.jpg"},{"name":"Julio Franco","title":"Chief Customer Officer","company":"Zappi","photo":"https://media.eventapps.techweb.com/speaker/Julio_Franco_528601_1784643315.jpg"},{"name":"Claire Frank","title":"Associate Account Executive","company":"Burke, Inc.","photo":"https://media.eventapps.techweb.com/speaker/Claire_Frank_530797_1789396781.jpg"},{"name":"Kym Frank","title":"Senior Vice President, Ad Sales Research","company":"Fox Corporation","photo":"https://media.eventapps.techweb.com/speaker/Kym_Frank_530396_1788185694.jpg"},{"name":"Susan Frazier","title":"Director, Customer Insights","company":"Hilton","photo":"https://media.eventapps.techweb.com/speaker/Susan_Frazier_527852_1778275781.jpg"},{"name":"Justin Fromm","title":"Head of Insights","company":"Samsung Ads","photo":"https://media.eventapps.techweb.com/speaker/Justin_Fromm_527831_1778212314.jpg"},{"name":"David Gates","title":"Director","company":"PwC","photo":"https://media.eventapps.techweb.com/speaker/David_Gates_530061_1786379951.jpeg"},{"name":"Kristen Griffith","title":"Director, Center Insights","company":"The Clorox Company","photo":"https://media.eventapps.techweb.com/speaker/Kristen_Griffith_527841_1778271535.png"},{"name":"Arnie Guha","title":"Partner, Chief Innovation Officer","company":"Phase 5","photo":"https://media.eventapps.techweb.com/speaker/Arnie_528130_1779887807.jpeg"},{"name":"Dhruv Guliani","title":"Co-Founder and CEO","company":"Keplar","photo":"https://media.eventapps.techweb.com/speaker/dhruv_headshot_v1_528156_1782738052.jpg"},{"name":"Michael Gunther","title":"Senior Vice President Research & Market Intelligence","company":"Consumer Edge","photo":"https://media.eventapps.techweb.com/speaker/Michael_Gunther_528255_1782246103.jpg"},{"name":"Pavi Gupta","title":"Board of Directors, MRII & Founder","company":"The Insights Exchange (TIEx LLC)","photo":"https://media.eventapps.techweb.com/speaker/Pavi_Gupta_528204_1781110882.png"},{"name":"Sarah Haftings","title":"Insights Manager","company":"Shurtape Technologies","photo":"https://media.eventapps.techweb.com/speaker/Sarah_Haftings_527830_1778878636.jpg"},{"name":"Jessica Hamel","title":"Founder","company":"PlantChi","photo":"https://media.eventapps.techweb.com/speaker/Jessica_Hamel_530345_1787857368.jpg"},{"name":"Valerie Hayden","title":"Director, Global Strategic Insights","company":"Alcon","photo":"https://media.eventapps.techweb.com/speaker/Valerie_Hayden_530583_1788968627.jpg"},{"name":"Douglas Healy","title":"Head of North America Insights","company":"The Kraft Heinz Company","photo":"https://media.eventapps.techweb.com/speaker/Douglas_Healy_527850_1778275099.jpg"},{"name":"Holly Hertsgaard","title":"Director, Market Research, Infectious Diseases","company":"Merck","photo":"https://media.eventapps.techweb.com/speaker/Holly_Hertsgaard_526636_1785867820.jpg"},{"name":"Martyn Hill","title":"Head of Business Development","company":"The Mix Global","photo":"https://media.eventapps.techweb.com/speaker/Martyn_Hill_529073_1785950952.jpg"},{"name":"Rich Hill","title":"Vice President of Client Experience and Insights","company":"Tunnl","photo":"https://media.eventapps.techweb.com/speaker/Rich_Hill_528463_1783700788.jpg"},{"name":"Tripp Hughes","title":"Senior Director, Consumer Strategy","company":"Organic Valley","photo":"https://media.eventapps.techweb.com/speaker/Tripp_Hughes_527843_1778271746.jpg"},{"name":"Adelaide Huni","title":"Global Insights Lead - Convenience Retail & Digital","company":"Shell","photo":"https://media.eventapps.techweb.com/speaker/Adelaide_Huni_530326_1787777547.jpeg"},{"name":"Joel Idelson","title":"CEO","company":"TeenVoice","photo":"https://media.eventapps.techweb.com/speaker/Joel_Idelson_528399_1782919124.png"},{"name":"Nancy Imbalzano","title":"Senior Director, Global Strategic Insights, Surgical & Vision Care","company":"Alcon","photo":"https://media.eventapps.techweb.com/speaker/Nancy_Imbalzano_528205_1788968157.jpg"},{"name":"Kate James","title":"Vice President, Strategic Research","company":"Fidelity Investments","photo":"https://media.eventapps.techweb.com/speaker/Kate_James_530528_1788884812.png"},{"name":"Sidney Jansons","title":"Senior Manager of Consumer Insights","company":"HelloFresh","photo":"https://media.eventapps.techweb.com/speaker/Sidney_Jansons_530053_1786373163.jpg"},{"name":"Nico Jaspers","title":"Founder and CEO","company":"Latana","photo":"https://media.eventapps.techweb.com/speaker/Nico_Jaspers_528109_1779376815.jpg"},{"name":"Z Johnson","title":"Head of Learning and Research","company":"ICN","photo":"https://media.eventapps.techweb.com/speaker/Z_Johnson_530055_1786373646.png"},{"name":"Michel Jones","title":"Chief People Officer","company":"OvationMR","photo":""},{"name":"Gireesh Joshi","title":"Director, Consumer Insights","company":"Adobe","photo":"https://media.eventapps.techweb.com/speaker/Gireesh_Joshi_527636_1776440625.jpeg"},{"name":"Ngozi Kamalu","title":"Director, Global Strategic Market Insights","company":"Jazz Pharmaceuticals","photo":"https://media.eventapps.techweb.com/speaker/Ngozi_Kamalu_528984_1785867924.png"},{"name":"Dani Kamras","title":"Co-Founder","company":"Cambri","photo":"https://media.eventapps.techweb.com/speaker/Dani_Kamras_528043_1778631284.jpg"},{"name":"Cliff Kane","title":"Senior Director, New Business Development","company":"EyeSee","photo":"https://media.eventapps.techweb.com/speaker/Cliff_Kane_528083_1785942322.jpg"},{"name":"Robin Karakash","title":"Former Mozilla Marketing VP, Senior Marketing Leader","company":"ASICS & Coca-Cola","photo":"https://media.eventapps.techweb.com/speaker/Robin_photo2_1773172782.jpg"},{"name":"Alyssa Kearney","title":"Managing Director","company":"Brandtrust","photo":"https://media.eventapps.techweb.com/speaker/Alyssa_Kearney_530201_1788967279.png"},{"name":"Randee Keating","title":"Senior Director of Consumer Insights","company":"Newell Brands","photo":"https://media.eventapps.techweb.com/speaker/Randee_Keating_528462_1783699524.png"},{"name":"Ed Keller","title":"Executive Director","company":"MRII","photo":"https://media.eventapps.techweb.com/speaker/Ed_Keller_527817_1778200316.jpg"},{"name":"Amy Kennedy","title":"Team Lead, Shopper Insights","company":"Unilever","photo":"https://media.eventapps.techweb.com/speaker/Amy_Kennedy_530799_1789398283.jpeg"},{"name":"Kahren Kersten","title":"VP of Research-on-Research","company":"ICN","photo":"https://media.eventapps.techweb.com/speaker/Kahren_Kersten_530054_1786373539.png"},{"name":"Angela Kesselman","title":"Sr. Manager, Brand Research & Insights","company":"Indeed","photo":"https://media.eventapps.techweb.com/speaker/Angela_Kesselman_527833_1778212916.jpg"},{"name":"Shilpa Khanna","title":"Associate Director, Transformational Growth Insights","company":"Clorox","photo":"https://media.eventapps.techweb.com/speaker/Shilpa_Khanna_528499_1783972651.jpg"},{"name":"Matt Kiviat","title":"Director, Strategic Growth","company":"Chomps","photo":"https://media.eventapps.techweb.com/speaker/Matt_Kiviat_530713_1789140444.jpeg"},{"name":"Sarah Kling","title":"Global Insights Lead, Devices & Services","company":"Amazon","photo":"https://media.eventapps.techweb.com/speaker/Sarah_Kling_527846_1778272978.jpg"},{"name":"Iva Kralj-Taylor","title":"Global Corporate Insights Director","company":"Warner Bros. Discovery","photo":"https://media.eventapps.techweb.com/speaker/Iva_Kralj-Taylor_530348_1787859237.jpg"},{"name":"Jason Kramer","title":"Co-Founder","company":"Focus","photo":"https://media.eventapps.techweb.com/speaker/Jason_Kramer_528582_1784572341.jpg"},{"name":"Matthew Kramer","title":"Editor","company":"All Things Insights","photo":"https://media.eventapps.techweb.com/speaker/Matthew_Kramer_527083_1773934278.jpg"},{"name":"Kirsten Kuhnert","title":"Head of Customer Insights UK","company":"Vodafone Three","photo":"https://media.eventapps.techweb.com/speaker/Kirsten_Kuhnert_530579_1788964530.jpg"},{"name":"Erika Lagunaviciute","title":"Director of Market Research","company":"RealTruck","photo":"https://media.eventapps.techweb.com/speaker/Erika_lagunaviciute_1772651799.jpg"},{"name":"Tom Lawrence","title":"Sr Insights Manager","company":"Hormel Foods","photo":"https://media.eventapps.techweb.com/speaker/Tom_Lawrence_526521_1778882908.jpg"},{"name":"Olaf Lenzmann","title":"Chief Innovation & Product Officer","company":"Market Logic","photo":"https://media.eventapps.techweb.com/speaker/Olaf_Lenzmann_528078_1778703396.jpg"},{"name":"Kathy Lesner","title":"Senior Client Partner","company":"Toluna","photo":"https://media.eventapps.techweb.com/speaker/Kathy_Lesner_530422_1788270923.jpg"},{"name":"Leib Litman","title":"Chief Research Officer","company":"CloudResearch","photo":"https://media.eventapps.techweb.com/speaker/Leib_Litman_528044_1785942345.jpg"},{"name":"Alex Mangoff","title":"Vice President, Strategic Insights & Analytics","company":"Burke, Inc.","photo":"https://media.eventapps.techweb.com/speaker/Alex_Mangoff_Headshot_2022_jpeg_530393_1788182491.jpg"},{"name":"Lara Manuel","title":"Head of Consumer Insights","company":"Prudential Financial","photo":"https://media.eventapps.techweb.com/speaker/Lara_Manuel_529049_1785944035.jpeg"},{"name":"Steve Markenson","title":"Vice President, Research & Insights","company":"FMI","photo":"https://media.eventapps.techweb.com/speaker/Steve_Markenson_1772385222.jpg"},{"name":"Lizzy Martinez","title":"General Manager, Consumer Research","company":"Delta","photo":"https://media.eventapps.techweb.com/speaker/Lizzy_Martinez_528667_1784919093.png"},{"name":"Lev Mazin","title":"CEO, Co-Founder","company":"aytm","photo":"https://media.eventapps.techweb.com/speaker/Lev_Mazin_528649_1784865879.png"},{"name":"Nisreen McConkie","title":"Former Director of Research","company":"PayPal","photo":"https://media.eventapps.techweb.com/speaker/Nisreen-47_1772125589.jpg"},{"name":"Joshua McGinty","title":"Consumer Insights Senior Analyst - Lexus","company":"Toyota","photo":"https://media.eventapps.techweb.com/speaker/Joshua_McGinty_528079_1778703539.png"},{"name":"Alejandro Garcia Medina","title":"Global Lead, B2B Institute","company":"LinkedIn","photo":"https://media.eventapps.techweb.com/speaker/Alejandro_Garcia_Medina_528102_1782225357.png"},{"name":"Eric Mercadante","title":"Research Scientist","company":"Prolific","photo":"https://media.eventapps.techweb.com/speaker/Eric_Mercadante_530116_1786461557.png"},{"name":"Amberly Miller","title":"Director of UX Research","company":"Prudential Financial","photo":"https://media.eventapps.techweb.com/speaker/Image__22__1772585338.jpeg"},{"name":"Liz Miller","title":"Global Client Director","company":"Knit","photo":"https://media.eventapps.techweb.com/speaker/Liz_Miller_530575_1788963549.png"},{"name":"Maxwell Miranda","title":"Director of Consumer Insights","company":"NASCAR","photo":"https://media.eventapps.techweb.com/speaker/Maxwell_Miranda_527815_1778884714.jpg"},{"name":"Sapna Mistry","title":"Director of Market Insights & Research","company":"Insulet Corporation","photo":"https://media.eventapps.techweb.com/speaker/Sapna_Mistry_527828_1778211557.jpg"},{"name":"Tyler Monroe","title":"Senior Insights Manager","company":"Molson Coors Beverage Company","photo":"https://media.eventapps.techweb.com/speaker/Tyler_Monroe_528749_1785868141.jpg"},{"name":"Eli Moore","title":"VP, Data Strategy","company":"Burke, Inc.","photo":"https://media.eventapps.techweb.com/speaker/Eli_Moore_530066_1786384870.png"},{"name":"Vicky Nagovan","title":"Strategy & Insights Planning Manager","company":"ZS","photo":"https://media.eventapps.techweb.com/speaker/Vicky_Nagovan_530530_1788961500.jpg"},{"name":"Chris Neal","title":"VP, Technology & Telecom Practice","company":"Chadwick Martin Bailey","photo":"https://media.eventapps.techweb.com/speaker/Chris_Neal_530699_1789133958.png"},{"name":"Bridget Nelson","title":"Head of Brand Performance and Audience Research","company":"MassMutual","photo":"https://media.eventapps.techweb.com/speaker/Bridget_530292_1787751781.jpeg"},{"name":"Matt Nelson","title":"Global CEO","company":"Mintel","photo":"https://media.eventapps.techweb.com/speaker/Matt_Nelson_528167_1780543217.jpg"},{"name":"Renee Neubecker","title":"Director, Strategy & Market Insights","company":"Motorola Solutions","photo":"https://media.eventapps.techweb.com/speaker/Renee_Neubecker_527819_1784132415.jpg"},{"name":"Niels Neudecker","title":"Managing Director, North America","company":"Human8","photo":"https://media.eventapps.techweb.com/speaker/Niels_Neudecker_528080_1778703836.jpg"},{"name":"Emily Neville","title":"Director of CX Research","company":"Rocket","photo":"https://media.eventapps.techweb.com/speaker/Mily_Neville_528321_1782741998.png"},{"name":"Michael Nevski","title":"Former Director, Global Insights","company":"Visa","photo":"https://media.eventapps.techweb.com/speaker/Screenshot_2024-09-24_111350_1771437238.png"},{"name":"James Newswanger","title":"Lecturer, Applied Analytics","company":"Columbia University","photo":"https://media.eventapps.techweb.com/speaker/James_Newswanger_527790_1777907135.jpg"},{"name":"Jennifer Ng","title":"GM, Advertiser Insights","company":"The Trade Desk","photo":"https://media.eventapps.techweb.com/speaker/JennNgheadshot_1772218831.jpeg"},{"name":"Keren Novack","title":"President","company":"Curion","photo":"https://media.eventapps.techweb.com/speaker/Keren_Novack_528750_1785266824.jpg"},{"name":"Josh Nu'u-Steele","title":"Co-Founder","company":"Ideally","photo":"https://media.eventapps.techweb.com/speaker/Joshua_Nu_u-Steele_530448_1788358707.png"},{"name":"Jen O'Brien","title":"Director for Research and Innovation","company":"American Marketing Association","photo":"https://media.eventapps.techweb.com/speaker/Jen_O_Brien_530145_1786484932.jpeg"},{"name":"Elizabeth Oates","title":"Vice President, Consumer Insights","company":"Molson Coors","photo":"https://media.eventapps.techweb.com/speaker/Elizabeth_Oates_527840_1778271122.jpg"},{"name":"Lore Oxford","title":"Head of Insights Product","company":"Reddit","photo":"https://media.eventapps.techweb.com/speaker/Lore_Oxford_527824_1778210157.jpg"},{"name":"Piril Paker Yagli","title":"Vice President, Global Brand & Growth Research","company":"Warner Bros. Discovery","photo":"https://media.eventapps.techweb.com/speaker/Piril_Parker_Yagli_527823_1778208041.jpg"},{"name":"Reuben Paris","title":"Vice President of Product & Business Development for Engage","company":"CloudResearch","photo":"https://media.eventapps.techweb.com/speaker/Reuben_Paris_530271_1787323361.jpg"},{"name":"Romani Patel","title":"Director, Data Science","company":"Microsoft","photo":"https://media.eventapps.techweb.com/speaker/Romani_Patel_527844_1778272325.png"},{"name":"Dr. Mansi Patney","title":"Global Director, Digital Insights, Analytics and Methods Consumer Insights","company":"Symrise AG","photo":"https://media.eventapps.techweb.com/speaker/Mansi_Head_shot_530278_1787681115.jpeg"},{"name":"Rikki Pearce","title":"Global Head of R&D and Advanced Analytics","company":"Verve","photo":"https://media.eventapps.techweb.com/speaker/Rikki_Pearce_530334_1787845863.jpg"},{"name":"Kirk Peterson","title":"VP Head of Brand Marketing","company":"Prudential Financial","photo":"https://media.eventapps.techweb.com/speaker/Kirk_Peterson_529048_1785943975.jpg"},{"name":"Michelle Pichman","title":"Senior Director of Innovation and Enablement, Research","company":"Numerator","photo":"https://media.eventapps.techweb.com/speaker/Michelle_Pichman_528042_1778614058.jpg"},{"name":"Sarah Polansky","title":"VP, Future Strategy & Innovation","company":"Dig Insights","photo":"https://media.eventapps.techweb.com/speaker/Sarah_Polansky_528748_1785266524.jpeg"},{"name":"Renata Policicio","title":"SVP Research, Streaming","company":"Warner Bros Discovery","photo":"https://media.eventapps.techweb.com/speaker/Renata_Policicio_527822_1778207612.jpg"},{"name":"Marc Pritchard","title":"Chief Brand Officer","company":"Procter & Gamble","photo":"https://media.eventapps.techweb.com/speaker/Marc_Pritchard_headshot_2022_inductee_527803_1777991847.jpg"},{"name":"Suraj Rajdev","title":"Head of Anaytics","company":"Google","photo":"https://media.eventapps.techweb.com/speaker/Suraj-Rajdev_511560_1718134183.jpeg"},{"name":"Thomas Zo\u00ebga Rams\u00f8y","title":"Founder & CEO","company":"Neurons","photo":"https://media.eventapps.techweb.com/speaker/Thomas_Zoga_Ramsy_528074_1778693519.png"},{"name":"Sol Rashidi","title":"4x C-Suite & Amazon Exec, World's 1st Chief AI Officer","company":"","photo":"https://media.eventapps.techweb.com/speaker/Sol_Rashidi_527848_1778273895.jpeg"},{"name":"Julie Rickis","title":"Head of Customer Experience","company":"MassMutual","photo":"https://media.eventapps.techweb.com/speaker/Julie_Rickis_527794_1779118273.png"},{"name":"Laura Rivera","title":"Senior Director of User Research & Field Testing","company":"Peloton","photo":"https://media.eventapps.techweb.com/speaker/Laura_Rivera_530172_1786629654.png"},{"name":"Monika Rogers","title":"SVP, Growth Strategy","company":"CMB","photo":"https://media.eventapps.techweb.com/speaker/Monika_Rogers_528041_1778613613.jpg"},{"name":"Eugene Roytburg","title":"CEO & Co-Founder","company":"Cloverpop","photo":"https://media.eventapps.techweb.com/speaker/Eugene_shot_528769_1785339149.png"},{"name":"Raina Rusnak","title":"Head of Consumer Insights","company":"StarKist","photo":"https://media.eventapps.techweb.com/speaker/RR3_1771610642.jpg"},{"name":"Meg Ryan","title":"Senior Director, Insights","company":"Prodege","photo":"https://media.eventapps.techweb.com/speaker/Meg_Ryan_528835_1785524386.png"},{"name":"Shalini Sahi","title":"Co-Founder","company":"South Asians in Marketing and Insights (SAMI)","photo":""},{"name":"Erica Sandler","title":"Global Consumer Insights for Chrome Browser Marketing","company":"Google","photo":"https://media.eventapps.techweb.com/speaker/Erica_Sandler_530573_1788963166.jpeg"},{"name":"Jenna Santos","title":"GTM Consumer Insights Analyst","company":"Sonos, Inc","photo":"https://media.eventapps.techweb.com/speaker/Jenna_Santos_530529_1788884820.png"},{"name":"Shuchi Sarkar","title":"Chief Marketing Officer","company":"AAA Club Alliance","photo":"https://media.eventapps.techweb.com/speaker/Shuchi_Sarkar_527788_1777905871.jpeg"},{"name":"Steve Schafer","title":"Vice President, Insight","company":"Brado","photo":"https://media.eventapps.techweb.com/speaker/Steve_Schafer_526519_1785868857.jpeg"},{"name":"Michelle Seguin","title":"Market and Customer Researcher","company":"Cox Automotive","photo":"https://media.eventapps.techweb.com/speaker/Michelle_Seguin_528836_1785524488.jpeg"},{"name":"Jessica Serrano","title":"Chief Marketing Officer","company":"Bagel Brands","photo":"https://media.eventapps.techweb.com/speaker/Jessica_Serrano_copy_530193_1786929718.jpg"},{"name":"Betsy Shaak","title":"VP of Product","company":"Voxpopme","photo":"https://media.eventapps.techweb.com/speaker/Betsy_Shaak_530476_1788454109.png"},{"name":"Jean Shaw","title":"Senior Director of Market Research and Intelligence","company":"Evernorth Health Services","photo":"https://media.eventapps.techweb.com/speaker/Jean_Shaw_527635_1776440496.jpg"},{"name":"Kirti Singh","title":"Chief Analytics and Insights Officer","company":"Procter & Gamble","photo":"https://media.eventapps.techweb.com/speaker/kirti-singh_527804_1777992165.jpg"},{"name":"Keith Smith","title":"Managing Director, MSI","company":"Marketing Science Institute","photo":"https://media.eventapps.techweb.com/speaker/Keith_Smith_526599_1782920640.jpg"},{"name":"Leigh Smith","title":"Sr. Director, Research","company":"Typeform","photo":"https://media.eventapps.techweb.com/speaker/Leigh_Smith_528084_1778704981.jpg"},{"name":"Oksana Sobol","title":"Vice President of Insights","company":"The Clorox Company","photo":"https://media.eventapps.techweb.com/speaker/Oksana_Sobol_527847_1778273084.jpg"},{"name":"Kendra Speed","title":"Lecturer, Darla Moore School of Business","company":"University of South Carolina","photo":"https://media.eventapps.techweb.com/speaker/Kendra_Speed_527792_1777907513.jpg"},{"name":"Stephen Springfield","title":"Co-Founder","company":"Evidence Based Marketing Alliance","photo":"https://media.eventapps.techweb.com/speaker/Stephen_Springfield_530577_1788964153.jpg"},{"name":"Antoinette Staples","title":"Senior Director, Customer Insights & Success","company":"McKesson","photo":"https://media.eventapps.techweb.com/speaker/Antoinette_Staples_527805_1778077177.png"},{"name":"Anna Stoesz","title":"Lecturer - Carlson School of Management Impact Lab","company":"University of Minnesota","photo":"https://media.eventapps.techweb.com/speaker/Anna_Stoesz_1772233956.jpeg"},{"name":"Hailey Sullivan","title":"Chief Marketing Officer","company":"Denver Broncos","photo":"https://media.eventapps.techweb.com/speaker/HaileySullivan_headshot_527587_1776202584.jpg"},{"name":"Naiqu Sun","title":"Head of Partnerships","company":"Pogo","photo":"https://media.eventapps.techweb.com/speaker/Naiqu_Sun_530712_1789140400.jpeg"},{"name":"Kajoli Tankha","title":"Senior Director, Consumer and Reputation Insights","company":"Microsoft","photo":"https://media.eventapps.techweb.com/speaker/Kajoli_Tankha_527791_1777916534.jpg"},{"name":"Brian Tatum","title":"Co-Founder","company":"Outward Intelligence","photo":"https://media.eventapps.techweb.com/speaker/Brian_Tatum_530474_1788442632.png"},{"name":"David Tiltman","title":"Chief Content Officer","company":"WARC","photo":"https://media.eventapps.techweb.com/speaker/David_Tiltman__4__528117_1788355034.png"},{"name":"Lena Tjosvold","title":"Director","company":"Visa","photo":"https://media.eventapps.techweb.com/speaker/Lena_Tjosvold_527079_1778886282.jpg"},{"name":"Carolyn Tomlinson","title":"Vice President, Innovation, Speed to Market and Packaging","company":"Rich Products Corporation","photo":"https://media.eventapps.techweb.com/speaker/Carolyn_Tomlinson_530571_1788961769.png"},{"name":"Jacob Trumbull","title":"Founder","company":"Roaring Fork Mill","photo":"https://media.eventapps.techweb.com/speaker/Jacob_Trumbull_530268_1787322089.jpg"},{"name":"Inna Tsirlin","title":"Head of  Shopping UXR, YouTube","company":"YouTube","photo":"https://media.eventapps.techweb.com/speaker/Inna_Tsirlin_528099_1779198313.jpg"},{"name":"Surya Turlapati","title":"Senior Manager","company":"PwC","photo":"https://media.eventapps.techweb.com/speaker/Surya_Turlapati_530062_1786379958.png"},{"name":"James 'JT' Turner","title":"Founder & CEO","company":"Delineate","photo":"https://media.eventapps.techweb.com/speaker/James_Turner_528077_1778702624.jpg"},{"name":"Gabrielle Union","title":"Actress, Producer, Best-Selling Author, and Co-Founder","company":"Flawless By Gabrielle Union, Bitsy's and Proudly","photo":"https://media.eventapps.techweb.com/speaker/Gabrielle_Union_528219_1781704584.jpeg"},{"name":"Maria Vallis","title":"CEO","company":"Hypothesis Group","photo":"https://media.eventapps.techweb.com/speaker/Maria_Vallis_528751_1785267009.jpg"},{"name":"Narek Vardanyan","title":"CEO","company":"Prelaunch.com","photo":"https://media.eventapps.techweb.com/speaker/Narek_Vardanyan_528604_1784644091.jpg"},{"name":"Sofia Vazquez-Barrios","title":"Director of Consumer Insights, North America, Fine Fragrance","company":"DSM-Firmenich","photo":"https://media.eventapps.techweb.com/speaker/Sofia_Vazquez_527842_1778271917.png"},{"name":"Patrick Ward","title":"Institutional Marketing","company":"Vanguard","photo":"https://media.eventapps.techweb.com/speaker/IMG_0034_502083_1678906082.jpg"},{"name":"Ben Warner","title":"Co-Founder","company":"Electric Twin","photo":"https://media.eventapps.techweb.com/speaker/Ben_Warner_530578_1788964542.png"},{"name":"Carolyn Wei","title":"Principal UX Researcher","company":"Meta","photo":"https://media.eventapps.techweb.com/speaker/Carolyn_Wei_527795_1777915418.jpg"},{"name":"Emily Weinstein","title":"Head of Strategic Insights & Analytics","company":"Danone","photo":"https://media.eventapps.techweb.com/speaker/Emily_Weinstein_530300_1787679418.png"},{"name":"Jordan Welling","title":"Director of Consumer Insights","company":"Tecovas","photo":"https://media.eventapps.techweb.com/speaker/Jordan_Welling_527845_1778272412.jpg"},{"name":"Tiffanie Williams","title":"Director, Consumer Insights","company":"McAfee","photo":"https://media.eventapps.techweb.com/speaker/2026Profile_Square_528090_1779114237.jpg"},{"name":"Dom Wong","title":"CEO/Founder","company":"Pogo","photo":"https://media.eventapps.techweb.com/speaker/Dom_Wong_dad7f6d2bc29fe00ecdf2f7fc3cee517_0e34229e72__1__528148_1779992810.jpg"},{"name":"Chris Younger","title":"President","company":"Ayzenberg Group/Audience Council","photo":"https://media.eventapps.techweb.com/speaker/Chris_Younger_530794_1789395585.jpg"},{"name":"Derek Yueh","title":"Global Lead, B2B Institute","company":"LinkedIn","photo":"https://media.eventapps.techweb.com/speaker/Derek_Yueh_528101_1779198895.png"},{"name":"Jay Zaltzman","title":"Former President","company":"QRCA","photo":"https://media.eventapps.techweb.com/speaker/Jay_Zaltzman_529315_1786035378.png"},{"name":"Nicole Zeng","title":"Head of Research","company":"Dialogue AI","photo":"https://media.eventapps.techweb.com/speaker/Nicole_Zeng_530477_1788454730.png"},{"name":"Travis Zissu","title":"Founder","company":"Scale Food Labs","photo":"https://media.eventapps.techweb.com/speaker/Travis_Zissu_530576_1788963809.jpg"}];
+
+  var TRACK_ORDER = ["AI in Action","Insights-Driven Strategy & Impact","New Research Methods","The Future of Insights","Human-Powered Insights","Emerging Consumer Trends","Foresight & Future Planning","Aligning Analytics & Insights","From Numbers to Narrative","General Session"];
+  var DAY_LABELS = {"2026-10-05":"Monday, October 5","2026-10-06":"Tuesday, October 6","2026-10-07":"Wednesday, October 7"};
+
+  // build track pills from real data
+  var trackCounts = {};
+  SESSIONS.forEach(function(s){ if(s.track) trackCounts[s.track] = (trackCounts[s.track]||0) + 1; });
+  var trackFilterEl = document.getElementById('track-filters');
+  TRACK_ORDER.filter(function(t){ return trackCounts[t]; }).forEach(function(t){
+    var b = document.createElement('button');
+    b.className = 'pill';
+    b.setAttribute('data-track', t);
+    b.setAttribute('aria-pressed', 'false');
+    b.textContent = t;
+    trackFilterEl.appendChild(b);
+  });
+
+  // derive a lightweight "speaker directory" entry per person: which sessions/tracks they're in
+  var sessionsByPerson = {};
+  SESSIONS.forEach(function(s){
+    (s.speakers||[]).forEach(function(sp){
+      var key = sp.name.toLowerCase();
+      if(!sessionsByPerson[key]) sessionsByPerson[key] = [];
+      sessionsByPerson[key].push(s);
+    });
+  });
+
+  var grid = document.getElementById('speaker-grid');
+  var list = document.getElementById('session-list');
+
+  function initials(n){ return n.split(" ").map(function(w){return w[0];}).join("").slice(0,3); }
+
+  function avatarHTML(s){
+    if(s.photo){
+      return '<img class="avatar-photo" src="'+s.photo+'" alt="" loading="lazy" '
+        + 'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+        + '<div class="avatar" style="display:none">'+initials(s.name)+'</div>';
+    }
+    return '<div class="avatar">'+initials(s.name)+'</div>';
+  }
+
+  function render(filterTrack, query){
+    query = (query||"").toLowerCase();
+
+    // --- speakers: only show people who are actually speaking in a matching session, so
+    // filtering the hub filters both halves together ---
+    var visibleSessions = SESSIONS.filter(function(s){
+      var trackOk = filterTrack === "all" || s.track === filterTrack;
+      var hay = (s.title + " " + s.location + " " + (s.speakers||[]).map(function(p){return p.name+" "+p.company;}).join(" ")).toLowerCase();
+      var qOk = !query || hay.indexOf(query) > -1;
+      return trackOk && qOk;
+    });
+
+    var namesInView = {};
+    visibleSessions.forEach(function(s){ (s.speakers||[]).forEach(function(sp){ namesInView[sp.name.toLowerCase()] = true; }); });
+
+    var matchedSpeakers = SPEAKERS.filter(function(sp){
+      if(Object.keys(namesInView).length && !namesInView[sp.name.toLowerCase()]) return false;
+      if(!Object.keys(namesInView).length && filterTrack !== "all") return false;
+      var hay = (sp.name + " " + sp.title + " " + sp.company).toLowerCase();
+      return !query || hay.indexOf(query) > -1;
+    }).slice(0, 60);
+
+    grid.innerHTML = "";
+    matchedSpeakers.forEach(function(s){
+      var card = document.createElement('div');
+      card.className = 'speaker-card';
+      var sessCount = (sessionsByPerson[s.name.toLowerCase()]||[]).length;
+      var sub = [s.title, s.company].filter(Boolean).join(", ");
+      card.innerHTML = avatarHTML(s) + '<h3>'+s.name+'</h3><div class="speaker-role">'+sub+'</div><div class="speaker-abs">'+(sessCount ? sessCount+' session'+(sessCount>1?'s':'')+' on the agenda' : 'Speaker bio pending session assignment')+'</div>';
+      grid.appendChild(card);
+    });
+    if(!grid.children.length){ grid.innerHTML = '<div class="sec-note">No speakers match that filter yet.</div>'; }
+
+    // --- sessions, grouped into a collapsible section per day ---
+    var byDate = {};
+    var dateOrder = [];
+    visibleSessions.forEach(function(s){
+      if(!byDate[s.date]){ byDate[s.date] = []; dateOrder.push(s.date); }
+      byDate[s.date].push(s);
+    });
+    dateOrder.sort();
+
+    var isFiltering = !!(query || filterTrack !== "all");
+    list.innerHTML = "";
+    dateOrder.forEach(function(date, i){
+      var sessions = byDate[date];
+      var details = document.createElement('details');
+      details.className = 'day-group';
+      if(i === 0 || isFiltering) details.open = true;
+      var summary = document.createElement('summary');
+      summary.className = 'day-summary';
+      summary.innerHTML = '<span>'+(DAY_LABELS[date]||date)+'</span><span class="meta-right">'+sessions.length+' session'+(sessions.length>1?'s':'')+'<span class="chevron">▸</span></span>';
+      details.appendChild(summary);
+      var wrap = document.createElement('div');
+      wrap.className = 'day-sessions';
+      sessions.forEach(function(s){
+        var row = document.createElement('div');
+        row.className = 'session-row';
+        var names = (s.speakers||[]).map(function(p){return p.name;}).join(", ");
+        var metaBits = [names, s.location].filter(Boolean).join(' · ');
+        row.innerHTML = '<div class="time mono">'+s.start+'</div><div><div class="title">'+s.title+'</div><div class="meta">'+metaBits+'</div></div><div class="badge">'+(s.track || s.type)+'</div>';
+        wrap.appendChild(row);
+      });
+      details.appendChild(wrap);
+      list.appendChild(details);
+    });
+    if(!dateOrder.length){ list.innerHTML = '<div class="sec-note" style="padding:16px 20px;">No sessions match that filter.</div>'; }
+  }
+
+  var currentTrack = "all";
+  document.querySelectorAll('#track-filters .pill').forEach(function(p){
+    p.addEventListener('click', function(){
+      document.querySelectorAll('#track-filters .pill').forEach(function(o){o.setAttribute('aria-pressed','false');});
+      p.setAttribute('aria-pressed','true');
+      currentTrack = p.getAttribute('data-track');
+      render(currentTrack, document.getElementById('search').value);
+    });
+  });
+  document.getElementById('search').addEventListener('input', function(e){ render(currentTrack, e.target.value); });
+  render("all","");
+
+  // ---------- concierge form: real signup, saved server-side ----------
+  document.getElementById('concierge-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var form = this;
+    var msg = document.getElementById('cf-msg');
+    var btn = form.querySelector('button[type="submit"]');
+    msg.classList.remove('show');
+    var name = document.getElementById('cf-name').value.trim();
+    var email = document.getElementById('cf-email').value.trim();
+    var tracks = Array.from(form.querySelectorAll('.check-pill input:checked')).map(function(cb){
+      return cb.nextElementSibling.textContent.trim();
+    });
+    if(!tracks.length){
+      msg.textContent = 'Pick at least one track.';
+      msg.classList.add('show');
+      return;
+    }
+    btn.disabled = true;
+    fetch('/.netlify/functions/concierge-signup', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name: name, email: email, tracks: tracks})
+    }).then(function(r){ return r.json().then(function(data){ return {ok: r.ok, data: data}; }); })
+      .then(function(res){
+        btn.disabled = false;
+        if(res.ok && res.data && res.data.ok){
+          msg.textContent = "You're in — pings start Oct 5.";
+          form.reset();
+          form.querySelectorAll('.check-pill input')[0].checked = true;
+        } else {
+          msg.textContent = (res.data && res.data.error) || "Something went wrong — try again.";
+        }
+        msg.classList.add('show');
+      }).catch(function(){
+        btn.disabled = false;
+        msg.textContent = "Couldn't reach the server — try again in a moment.";
+        msg.classList.add('show');
+      });
+  });
+
+  // ---------- contrarian wall: real shared submissions + votes ----------
+  var wallEntries = [];
+  var voterId = (function(){
+    try {
+      var v = localStorage.getItem('cw_voter_id');
+      if(!v){ v = 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2); localStorage.setItem('cw_voter_id', v); }
+      return v;
+    } catch(e){ return 'v_' + Math.random().toString(36).slice(2); }
+  })();
+  var myVotes = {};
+  try { myVotes = JSON.parse(localStorage.getItem('cw_my_votes')||'{}'); } catch(e){}
+
+  var FALLBACK_WALL = [
+    {id:'demo1', obvious:'"Loyalty programs are dying — nobody redeems points anymore."', signal:"Redemption rates are up 18% YoY. What's dying is broad discounting, not loyalty.", who:"Tomás Reyes · Amplifier", votes:34},
+    {id:'demo2', obvious:'"Gen Z tunes out every ad they see."', signal:"They tune out anything shaped like an ad. Native-format spend is converting 3x higher.", who:"Achieng Muthoni · Advisor", votes:29},
+    {id:'demo3', obvious:'"Short-form video is the only format that still works."', signal:"Completion rates on 8–12 min explainers are climbing fastest — attention is bifurcating, not shrinking.", who:"Submitted anonymously", votes:22},
+    {id:'demo4', obvious:'"Price is the top switching driver right now."', signal:"Return-friction is: shoppers switch to whoever makes reversing a bad choice effortless.", who:"Lena Forsythe · Amplifier", votes:17}
+  ];
+
+  function renderWall(){
+    var feed = document.getElementById('wall-feed');
+    var lb = document.getElementById('leaderboard');
+    feed.innerHTML = "";
+    wallEntries.forEach(function(entry){
+      var card = document.createElement('div');
+      card.className = 'wall-card';
+      var voted = !!myVotes[entry.id];
+      card.innerHTML = '<div class="obvious">'+entry.obvious+'</div><div class="signal">'+entry.signal+'</div>'+
+        '<div class="foot"><span class="who">'+entry.who+'</span><button class="vote-btn'+(voted?' voted':'')+'" data-id="'+entry.id+'"><span class="arrow">▲</span><span class="count">'+entry.votes+'</span></button></div>';
+      feed.appendChild(card);
+    });
+    feed.querySelectorAll('.vote-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = btn.getAttribute('data-id');
+        if(myVotes[id]) return;
+        btn.disabled = true;
+        fetch('/.netlify/functions/wall-vote', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({id: id, voterId: voterId})
+        }).then(function(r){ return r.json(); }).then(function(res){
+          btn.disabled = false;
+          if(res && res.ok){
+            myVotes[id] = true;
+            try { localStorage.setItem('cw_my_votes', JSON.stringify(myVotes)); } catch(e){}
+            var entry = wallEntries.filter(function(e2){ return e2.id === id; })[0];
+            if(entry && res.entry) entry.votes = res.entry.votes;
+            renderWall();
+          }
+        }).catch(function(){ btn.disabled = false; });
+      });
+    });
+    var ranked = wallEntries.slice().sort(function(a,b){ return b.votes - a.votes; }).slice(0,5);
+    lb.innerHTML = "";
+    ranked.forEach(function(entry, rank){
+      var row = document.createElement('div');
+      row.className = 'lb-row';
+      row.innerHTML = '<span class="lb-rank mono">'+(rank+1)+'</span><span class="lb-name">'+entry.who.split(' · ')[0]+'</span><span class="lb-votes">'+entry.votes+'</span>';
+      lb.appendChild(row);
+    });
+  }
+
+  function loadWall(){
+    fetch('/.netlify/functions/wall-list').then(function(r){
+      if(!r.ok) throw new Error('bad response');
+      return r.json();
+    }).then(function(data){
+      wallEntries = (data.entries && data.entries.length) ? data.entries : FALLBACK_WALL;
+      renderWall();
+      var statEl = document.getElementById('cd-submissions');
+      if(statEl) statEl.textContent = wallEntries.length;
+    }).catch(function(){
+      wallEntries = FALLBACK_WALL;
+      renderWall();
+      var statEl = document.getElementById('cd-submissions');
+      if(statEl) statEl.textContent = wallEntries.length;
+    });
+  }
+  loadWall();
+
+  document.getElementById('wf-anon').addEventListener('click', function(){
+    var pressed = this.getAttribute('aria-pressed') === 'true';
+    this.setAttribute('aria-pressed', String(!pressed));
+    document.getElementById('wf-name').disabled = !pressed ? true : false;
+    document.getElementById('wf-co').disabled = !pressed ? true : false;
+    document.getElementById('wf-name').placeholder = !pressed ? "Hidden (anonymous)" : "Your name";
+    document.getElementById('wf-co').placeholder = !pressed ? "Hidden (anonymous)" : "Your company";
+  });
+
+  document.getElementById('wall-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var anon = document.getElementById('wf-anon').getAttribute('aria-pressed') === 'true';
+    var form = this;
+    var msg = document.getElementById('wf-msg');
+    var btn = form.querySelector('button[type="submit"]');
+    msg.classList.remove('show');
+    btn.disabled = true;
+    fetch('/.netlify/functions/wall-submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        obvious: document.getElementById('wf-obvious').value,
+        signal: document.getElementById('wf-signal').value,
+        anonymous: anon,
+        name: document.getElementById('wf-name').value,
+        company: document.getElementById('wf-co').value
+      })
+    }).then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
+      .then(function(res){
+        btn.disabled = false;
+        if(res.ok && res.data && res.data.ok){
+          wallEntries.unshift(res.data.entry);
+          renderWall();
+          msg.textContent = "Posted — it's live on the wall below.";
+          form.reset();
+        } else {
+          msg.textContent = (res.data && res.data.error) || "Something went wrong — try again.";
+        }
+        msg.classList.add('show');
+      }).catch(function(){
+        btn.disabled = false;
+        msg.textContent = "Couldn't reach the server — try again in a moment.";
+        msg.classList.add('show');
+      });
+  });
+})();
+</script>
