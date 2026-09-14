@@ -1,57 +1,67 @@
 <!DOCTYPE html>
 <title>TMRE Experience Zone</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root{
-  --paper:#EEF0E6;
-  --paper-raised:#F8F9F3;
-  --ink:#1B1E17;
-  --ink-soft:#54574A;
-  --ink-faint:#82856F;
-  --consensus:#9A9C8C;
-  --consensus-bg:#E3E4D8;
-  --signal:#2F49E0;
-  --signal-ink:#20308F;
-  --signal-soft:#E4E8FB;
-  --line:rgba(27,30,23,0.14);
-  --line-soft:rgba(27,30,23,0.08);
+  /* Convosight brand: cream paper, forest-green primary accent, violet secondary accent */
+  --paper:#F3F0E7;
+  --paper-raised:#FFFFFF;
+  --ink:#14231C;
+  --ink-soft:#4B5A50;
+  --ink-faint:#8B9289;
+  --consensus:#A79F8C;
+  --consensus-bg:#EAE6D8;
+  --signal:#00C389;
+  --signal-ink:#067355;
+  --signal-soft:#DFF7EE;
+  --wall-accent:#6C5CE7;
+  --wall-accent-ink:#5541D6;
+  --wall-accent-soft:#EDEBFB;
+  --line:rgba(20,35,28,0.14);
+  --line-soft:rgba(20,35,28,0.08);
   --good:#2E7D5B;
   --good-bg:#DFEEE6;
-  --shadow:0 1px 2px rgba(27,30,23,0.06), 0 8px 24px -12px rgba(27,30,23,0.18);
+  --shadow:0 1px 2px rgba(20,35,28,0.06), 0 8px 24px -12px rgba(20,35,28,0.18);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#15170F;
-    --paper-raised:#1D2016;
-    --ink:#ECEEE3;
-    --ink-soft:#ABAE9B;
-    --ink-faint:#787C67;
-    --consensus:#6E7160;
-    --consensus-bg:#282C1F;
-    --signal:#8496FF;
-    --signal-ink:#C4CDFF;
-    --signal-soft:rgba(132,150,255,0.14);
-    --line:rgba(236,238,227,0.14);
-    --line-soft:rgba(236,238,227,0.07);
+    --paper:#0F2A20;
+    --paper-raised:#163C2C;
+    --ink:#F3F0E7;
+    --ink-soft:#C9CDBE;
+    --ink-faint:#8FA294;
+    --consensus:#6B7A6E;
+    --consensus-bg:#1C3A2C;
+    --signal:#3DD9A6;
+    --signal-ink:#B9F0D3;
+    --signal-soft:rgba(74,222,154,0.14);
+    --wall-accent:#A78BFA;
+    --wall-accent-ink:#D9CCFF;
+    --wall-accent-soft:rgba(167,139,250,0.16);
+    --line:rgba(243,240,231,0.14);
+    --line-soft:rgba(243,240,231,0.07);
     --good:#5FBE93;
     --good-bg:rgba(95,190,147,0.14);
     --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
   }
 }
 :root[data-theme="dark"]{
-  --paper:#15170F;
-  --paper-raised:#1D2016;
-  --ink:#ECEEE3;
-  --ink-soft:#ABAE9B;
-  --ink-faint:#787C67;
-  --consensus:#6E7160;
-  --consensus-bg:#282C1F;
-  --signal:#8496FF;
-  --signal-ink:#C4CDFF;
-  --signal-soft:rgba(132,150,255,0.14);
-  --line:rgba(236,238,227,0.14);
-  --line-soft:rgba(236,238,227,0.07);
+  --paper:#0F2A20;
+  --paper-raised:#163C2C;
+  --ink:#F3F0E7;
+  --ink-soft:#C9CDBE;
+  --ink-faint:#8FA294;
+  --consensus:#6B7A6E;
+  --consensus-bg:#1C3A2C;
+  --signal:#3DD9A6;
+  --signal-ink:#B9F0D3;
+  --signal-soft:rgba(74,222,154,0.14);
+  --wall-accent:#A78BFA;
+  --wall-accent-ink:#D9CCFF;
+  --wall-accent-soft:rgba(167,139,250,0.16);
+  --line:rgba(243,240,231,0.14);
+  --line-soft:rgba(243,240,231,0.07);
   --good:#5FBE93;
   --good-bg:rgba(95,190,147,0.14);
   --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
@@ -62,11 +72,11 @@ body{
   margin:0;
   background:var(--paper);
   color:var(--ink);
-  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  font-family:'Inter', system-ui, sans-serif;
   -webkit-font-smoothing:antialiased;
 }
 h1,h2,h3{
-  font-family:'Fraunces', Georgia, serif;
+  font-family:'Lora', Georgia, serif;
   font-weight:600;
   text-wrap:balance;
   margin:0;
@@ -89,7 +99,9 @@ img{max-width:100%;}
   max-width:1180px;margin:0 auto;padding:14px 32px;
   display:flex;align-items:center;justify-content:space-between;gap:24px;
 }
-.brand{display:flex;align-items:baseline;gap:10px;font-family:'Fraunces',serif;}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Lora',serif;}
+.convosight-mark{height:15px;width:auto;color:var(--ink);flex-shrink:0;}
+.brand-divider{width:1px;height:16px;background:var(--line);flex-shrink:0;}
 .brand b{font-weight:600;font-size:1.05rem;}
 .brand span{font-size:0.72rem;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
 .nav-links{display:flex;gap:28px;font-size:0.88rem;font-weight:500;}
@@ -121,7 +133,7 @@ img{max-width:100%;}
 .hero-sub{margin-top:18px;max-width:56ch;color:var(--ink-soft);font-size:1.05rem;line-height:1.55;}
 .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
 .btn{
-  font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:0.92rem;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:0.92rem;
   border-radius:10px;padding:12px 20px;border:1px solid transparent;cursor:pointer;text-decoration:none;
   display:inline-flex;align-items:center;gap:8px;transition:transform .12s, box-shadow .12s;
 }
@@ -129,8 +141,8 @@ img{max-width:100%;}
 .btn-primary{background:var(--signal);color:#fff;box-shadow:var(--shadow);}
 .btn-primary:hover{box-shadow:0 2px 4px rgba(0,0,0,.12),0 14px 28px -14px var(--signal);}
 :root[data-theme="dark"] .btn-primary,
-:root[data-theme="dark"] .booth-chip{color:#0E1030;}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary,:root:not([data-theme="light"]) .booth-chip{color:#0E1030;}}
+:root[data-theme="dark"] .booth-chip{color:var(--paper);}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary,:root:not([data-theme="light"]) .booth-chip{color:var(--paper);}}
 .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
 .btn-ghost:hover{border-color:var(--signal);color:var(--signal-ink);}
 
@@ -169,7 +181,7 @@ section{padding:64px 0;border-bottom:1px solid var(--line);}
 }
 .avatar{
   width:46px;height:46px;border-radius:50%;background:var(--signal-soft);color:var(--signal-ink);
-  display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-weight:600;font-size:1rem;
 }
 .avatar-photo{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block;background:var(--signal-soft);}
 .speaker-card h3{font-size:1.02rem;font-weight:600;}
@@ -194,7 +206,7 @@ section{padding:64px 0;border-bottom:1px solid var(--line);}
 .day-group .day-sessions{display:flex;flex-direction:column;gap:1px;background:var(--line);}
 .day-summary{
   display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;
-  padding:16px 20px;background:var(--paper-raised);font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;
+  padding:16px 20px;background:var(--paper-raised);font-family:'Lora',serif;font-weight:600;font-size:1.02rem;
   transition:background .12s;
 }
 .day-summary:hover{background:var(--signal-soft);}
@@ -249,12 +261,12 @@ details[open] > .day-summary .chevron{transform:rotate(90deg);}
   display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;
 }
 @media (max-width:780px){.contrarian-hero{grid-template-columns:1fr;}}
-.claim-obvious{font-family:'Fraunces',serif;font-style:italic;font-size:1.15rem;color:var(--consensus);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--consensus);line-height:1.4;}
-.claim-signal{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;color:var(--signal-ink);margin-top:14px;line-height:1.3;}
+.claim-obvious{font-family:'Lora',serif;font-style:italic;font-size:1.15rem;color:var(--consensus);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--consensus);line-height:1.4;}
+.claim-signal{font-family:'Lora',serif;font-weight:600;font-size:1.35rem;color:var(--wall-accent-ink);margin-top:14px;line-height:1.3;}
 .claim-attr{font-size:0.8rem;color:var(--ink-faint);margin-top:14px;font-family:'IBM Plex Mono',monospace;}
 .rules{display:flex;flex-direction:column;gap:10px;font-size:0.85rem;color:var(--ink-soft);}
 .rules li{list-style:none;display:flex;gap:10px;}
-.rules li::before{content:"→";color:var(--signal);flex-shrink:0;}
+.rules li::before{content:"→";color:var(--wall-accent);flex-shrink:0;}
 .rules ul{margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
 
 .wall-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;}
@@ -265,15 +277,15 @@ details[open] > .day-summary .chevron{transform:rotate(90deg);}
   display:flex;flex-direction:column;gap:12px;
 }
 .wall-card .obvious{font-size:0.82rem;color:var(--consensus);text-decoration:line-through;line-height:1.45;}
-.wall-card .signal{font-family:'Fraunces',serif;font-weight:600;font-size:1rem;color:var(--ink);line-height:1.4;}
+.wall-card .signal{font-family:'Lora',serif;font-weight:600;font-size:1rem;color:var(--ink);line-height:1.4;}
 .wall-card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--line-soft);}
 .wall-card .who{font-size:0.76rem;color:var(--ink-faint);}
 .vote-btn{
   display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:100px;
   padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--ink-soft);cursor:pointer;transition:all .12s;
 }
-.vote-btn:hover{border-color:var(--signal);color:var(--signal-ink);}
-.vote-btn.voted{background:var(--signal-soft);border-color:var(--signal);color:var(--signal-ink);}
+.vote-btn:hover{border-color:var(--wall-accent);color:var(--wall-accent-ink);}
+.vote-btn.voted{background:var(--wall-accent-soft);border-color:var(--wall-accent);color:var(--wall-accent-ink);}
 .vote-btn .arrow{transition:transform .12s;}
 .vote-btn.voted .arrow{transform:translateY(-1px);}
 
@@ -281,13 +293,13 @@ details[open] > .day-summary .chevron{transform:rotate(90deg);}
 .side-panel h3{font-size:0.95rem;margin-bottom:14px;}
 .weight-split{margin-bottom:18px;}
 .weight-bar{height:6px;border-radius:100px;background:var(--consensus-bg);overflow:hidden;display:flex;}
-.weight-bar span{display:block;height:100%;background:var(--signal);border-radius:100px 0 0 100px;}
+.weight-bar span{display:block;height:100%;background:var(--wall-accent);border-radius:100px 0 0 100px;}
 .weight-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--ink-faint);margin-top:6px;letter-spacing:.02em;}
 .lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);}
 .lb-row:last-child{border-bottom:none;}
 .lb-rank{font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--ink-faint);width:18px;}
 .lb-name{flex:1;font-size:0.85rem;}
-.lb-votes{font-family:'IBM Plex Mono',monospace;font-size:0.82rem;color:var(--signal-ink);font-variant-numeric:tabular-nums;}
+.lb-votes{font-family:'IBM Plex Mono',monospace;font-size:0.82rem;color:var(--wall-accent-ink);font-variant-numeric:tabular-nums;}
 .lb-note{font-size:0.76rem;color:var(--ink-faint);margin-top:16px;line-height:1.5;}
 
 .submit-form{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:36px;}
@@ -320,7 +332,28 @@ footer{padding:48px 0 64px;}
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="brand"><b>Experience&nbsp;Zone</b><span>TMRE 2026 · DENVER</span></div>
+    <div class="brand"><svg class="convosight-mark" width="139" height="32" viewBox="0 0 139 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_6008_60" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="1" width="138" height="29">
+<path d="M138 1.3913H0.828125V30H138V1.3913Z" fill="currentColor"/>
+</mask>
+<g mask="url(#mask0_6008_60)">
+<path d="M7.98363 23.4801C5.94159 23.4801 4.23416 22.7936 2.86047 21.4215C1.50527 20.0485 0.828125 18.3604 0.828125 16.3555C0.828125 14.3329 1.50527 12.644 2.86047 11.2895C4.23416 9.91734 5.94159 9.23083 7.98363 9.23083C9.30273 9.23083 10.5038 9.5468 11.5878 10.1796C12.6727 10.8115 13.4855 11.66 14.027 12.7258L11.5068 14.1886C11.1995 13.5382 10.7302 13.033 10.097 12.6712C9.48327 12.2919 8.7691 12.1027 7.95633 12.1027C6.76404 12.1027 5.76107 12.5093 4.94742 13.3217C4.15315 14.134 3.75513 15.1453 3.75513 16.3555C3.75513 17.5656 4.15315 18.5769 4.94742 19.3893C5.76107 20.2025 6.76404 20.6082 7.95633 20.6082C8.75149 20.6082 9.46478 20.419 10.097 20.0397C10.7478 19.6603 11.2356 19.1552 11.5614 18.5223L14.0816 19.9587C13.5031 21.0421 12.6727 21.9003 11.5878 22.5322C10.5038 23.1641 9.30273 23.4801 7.98363 23.4801Z" fill="currentColor"/>
+<path d="M46.4427 9.23083C47.9969 9.23083 49.2526 9.72811 50.2098 10.7209C51.1678 11.7146 51.6469 13.0779 51.6469 14.8117V23.128H48.7199V15.1092C48.7199 14.0979 48.4486 13.3217 47.9062 12.7795C47.3647 12.2382 46.6232 11.9672 45.6837 11.9672C44.6543 11.9672 43.823 12.2919 43.1907 12.9423C42.5576 13.5743 42.2415 14.5494 42.2415 15.8679V23.128H39.3145V9.58289H42.2415V11.3167C43.1274 9.92614 44.5275 9.23083 46.4427 9.23083Z" fill="currentColor"/>
+<path d="M62.9609 9.58264H66.1591L60.8739 23.1278H57.4864L52.2012 9.58264H55.3994L59.1938 19.8766L62.9609 9.58264Z" fill="currentColor"/>
+<path d="M73.0676 23.4801C71.0802 23.4801 69.3904 22.7936 67.9991 21.4215C66.6078 20.0485 65.9121 18.3604 65.9121 16.3555C65.9121 14.3505 66.6078 12.6625 67.9991 11.2895C69.3904 9.91734 71.0802 9.23083 73.0676 9.23083C75.0727 9.23083 76.7625 9.91734 78.1353 11.2895C79.5266 12.6625 80.2223 14.3505 80.2223 16.3555C80.2223 18.3604 79.5266 20.0485 78.1353 21.4215C76.7625 22.7936 75.0727 23.4801 73.0676 23.4801ZM70.0587 19.4165C70.8724 20.2298 71.8744 20.6355 73.0676 20.6355C74.2599 20.6355 75.2629 20.2298 76.0757 19.4165C76.8893 18.6042 77.2953 17.5832 77.2953 16.3555C77.2953 15.1277 76.8893 14.1067 76.0757 13.2944C75.2629 12.482 74.2599 12.0754 73.0676 12.0754C71.8744 12.0754 70.8724 12.482 70.0587 13.2944C69.2459 14.1067 68.8391 15.1277 68.8391 16.3555C68.8391 17.5832 69.2459 18.6042 70.0587 19.4165Z" fill="currentColor"/>
+<path d="M84.4205 13.3217C84.4205 13.7732 84.6645 14.134 85.1523 14.4051C85.6577 14.6577 86.2636 14.8839 86.968 15.0828C87.691 15.2632 88.4139 15.4797 89.136 15.7323C89.8589 15.9858 90.4648 16.4188 90.9527 17.0332C91.4581 17.629 91.7108 18.3877 91.7108 19.3083C91.7108 20.6082 91.2054 21.6292 90.1936 22.3694C89.1994 23.1096 87.9437 23.4801 86.4256 23.4801C85.0889 23.4801 83.9415 23.2002 82.9844 22.6405C82.0263 22.0807 81.3306 21.3035 80.8965 20.3108L83.4176 18.848C83.8869 20.1479 84.8899 20.7983 86.4256 20.7983C87.9622 20.7983 88.7301 20.2923 88.7301 19.281C88.7301 18.848 88.4764 18.4959 87.971 18.2249C87.4832 17.9538 86.8774 17.7285 86.1553 17.5472C85.45 17.3491 84.7367 17.1229 84.0137 16.8703C83.2908 16.6177 82.677 16.2023 82.1707 15.6241C81.6829 15.0282 81.4389 14.2784 81.4389 13.3754C81.4389 12.13 81.9092 11.1275 82.8487 10.3688C83.8059 9.61017 84.9894 9.23083 86.3992 9.23083C87.5193 9.23083 88.5126 9.48431 89.3799 9.9895C90.2658 10.4771 90.9429 11.1636 91.4132 12.0481L88.9467 13.4299C88.4765 12.4002 87.6276 11.8862 86.3992 11.8862C85.8392 11.8862 85.3689 12.012 84.9894 12.2646C84.6099 12.4996 84.4205 12.8517 84.4205 13.3217Z" fill="currentColor"/>
+<path d="M96.0772 7.00917C95.7162 7.3709 95.2821 7.55134 94.7766 7.55134C94.2703 7.55134 93.8282 7.3709 93.4487 7.00917C93.0868 6.62984 92.9062 6.18802 92.9062 5.68194C92.9062 5.17675 93.0868 4.74284 93.4487 4.38199C93.8097 4.00266 94.2527 3.81256 94.7766 3.81256C95.3005 3.81256 95.7435 4.00266 96.1045 4.38199C96.4655 4.74284 96.647 5.17675 96.647 5.68194C96.647 6.18802 96.4567 6.62984 96.0772 7.00917ZM93.3131 23.1278V9.58267H96.2401V23.1278H93.3131Z" fill="currentColor"/>
+<path d="M109.612 9.58289H112.486V22.5049C112.486 24.5635 111.808 26.1442 110.453 27.2453C109.098 28.3472 107.453 28.8982 105.52 28.8982C102.394 28.8982 100.253 27.8059 99.0967 25.6206L101.617 24.1578C102.322 25.5484 103.641 26.2437 105.574 26.2437C106.84 26.2437 107.824 25.9092 108.528 25.2412C109.251 24.5908 109.612 23.679 109.612 22.5049V20.8529C108.511 22.4239 106.938 23.209 104.897 23.209C102.982 23.209 101.364 22.5322 100.045 21.1777C98.7259 19.8047 98.0664 18.1527 98.0664 16.2199C98.0664 14.2881 98.7259 12.644 100.045 11.2895C101.364 9.91734 102.982 9.23083 104.897 9.23083C106.938 9.23083 108.511 10.0168 109.612 11.5878V9.58289ZM102.214 19.2546C103.045 20.067 104.075 20.4736 105.303 20.4736C106.532 20.4736 107.553 20.067 108.366 19.2546C109.197 18.4414 109.612 17.4301 109.612 16.2199C109.612 15.0098 109.197 13.9985 108.366 13.1861C107.553 12.3738 106.532 11.9672 105.303 11.9672C104.075 11.9672 103.045 12.3738 102.214 13.1861C101.4 13.9985 100.994 15.0098 100.994 16.2199C100.994 17.4301 101.4 18.4414 102.214 19.2546Z" fill="currentColor"/>
+<path d="M122.212 9.23059C123.766 9.23059 125.022 9.72787 125.979 10.7206C126.937 11.7143 127.416 13.0776 127.416 14.8115V23.1278H124.489V15.109C124.489 14.0977 124.218 13.3214 123.676 12.7793C123.134 12.238 122.393 11.9669 121.453 11.9669C120.424 11.9669 119.592 12.2917 118.96 12.9421C118.327 13.574 118.011 14.5492 118.011 15.8676V23.1278H115.084V4.16547H118.011V11.3165C118.897 9.9259 120.297 9.23059 122.212 9.23059Z" fill="currentColor"/>
+<path d="M137.316 12.3999H133.955V18.9014C133.955 19.4621 134.082 19.8678 134.335 20.1204C134.588 20.3554 134.958 20.4909 135.446 20.527C135.952 20.5455 136.576 20.5358 137.316 20.4997V23.1278C135.076 23.3989 133.467 23.2087 132.492 22.5592C131.516 21.8903 131.028 20.6713 131.028 18.9014V12.3999H128.535V9.58263H131.028V6.65709L133.955 5.79016V9.58263H137.316V12.3999Z" fill="currentColor"/>
+<path d="M26.2065 26.4595C32.2133 26.4595 37.0829 21.5924 37.0829 15.5886C37.0829 9.58477 32.2133 4.71771 26.2065 4.71771C20.1996 4.71771 15.3301 9.58477 15.3301 15.5886C15.3301 21.5924 20.1996 26.4595 26.2065 26.4595Z" fill="#00C389"/>
+<path d="M23.5946 15.0097C23.5946 14.4793 23.1644 14.0493 22.6337 14.0493C22.1031 14.0493 21.6729 14.4793 21.6729 15.0097V19.8115C21.6729 20.3419 22.1031 20.7719 22.6337 20.7719C23.1644 20.7719 23.5946 20.3419 23.5946 19.8115V15.0097Z" fill="currentColor"/>
+<path d="M31.2781 13.0895C31.2781 12.5591 30.848 12.1291 30.3173 12.1291C29.7866 12.1291 29.3564 12.5591 29.3564 13.0895V19.812C29.3564 20.3424 29.7866 20.7724 30.3173 20.7724C30.848 20.7724 31.2781 20.3424 31.2781 19.812V13.0895Z" fill="currentColor"/>
+<path d="M27.4364 10.2077C27.4364 9.67729 27.0062 9.24731 26.4755 9.24731C25.9449 9.24731 25.5146 9.67729 25.5146 10.2077V19.8113C25.5146 20.3417 25.9449 20.7717 26.4755 20.7717C27.0062 20.7717 27.4364 20.3417 27.4364 19.8113V10.2077Z" fill="currentColor"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M15.7543 9.26406C18.9296 3.58636 26.108 1.55678 31.7886 4.72964L32.6727 3.14894C26.1186 -0.513265 17.8351 1.82875 14.1719 8.37953L15.7543 9.26406Z" fill="#00C389"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M36.6792 21.7302C33.5038 27.4079 26.3254 29.4374 20.6449 26.2637L19.7607 27.8453C26.3148 31.5075 34.5984 29.1646 38.2616 22.6138L36.6792 21.7302Z" fill="#00C389"/>
+</g>
+</svg><span class="brand-divider" aria-hidden="true"></span><b>Experience&nbsp;Zone</b><span>TMRE 2026 · DENVER</span></div>
     <div class="nav-links">
       <a href="#agenda">Speaker &amp; Agenda Hub</a>
       <a href="#concierge">Session Concierge</a>
