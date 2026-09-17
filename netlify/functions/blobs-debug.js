@@ -13,6 +13,17 @@ exports.handler = async function (event) {
   }
   try {
     const store = getStore({ name: "debug-store", siteID, token });
+    if (q.echo) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          receivedSiteIDLen: siteID.length,
+          receivedTokenLen: token.length,
+          receivedTokenPrefix: token.slice(0, 5),
+          blobsVersion: require("@netlify/blobs/package.json").version,
+        }),
+      };
+    }
     await store.set("ping", "pong");
     const val = await store.get("ping");
     return { statusCode: 200, body: JSON.stringify({ ok: true, val }) };
