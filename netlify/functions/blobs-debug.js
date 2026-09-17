@@ -12,7 +12,7 @@ exports.handler = async function (event) {
     return { statusCode: 400, body: JSON.stringify({ error: "pass ?siteid=...&token=..." }) };
   }
   try {
-    const store = getStore("debug-store", { siteID, token });
+    const store = getStore({ name: "debug-store", siteID, token });
     await store.set("ping", "pong");
     const val = await store.get("ping");
     return { statusCode: 200, body: JSON.stringify({ ok: true, val }) };
