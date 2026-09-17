@@ -527,6 +527,29 @@ footer{padding:48px 0 64px;}
   </div>
 </footer>
 
+<!-- Hidden, never-shown forms: present purely so Netlify's build-time crawler
+     registers each form's field schema. Actual submissions are sent by JS via
+     fetch() to "/" — see netlifyFormSubmit() below — never through these. -->
+<form name="wall-submission" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="id">
+  <input type="text" name="obvious">
+  <input type="text" name="signal">
+  <input type="text" name="who">
+  <input type="text" name="anonymous">
+</form>
+<form name="wall-vote" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="targetId">
+  <input type="hidden" name="voterId">
+</form>
+<form name="concierge-optin" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name">
+  <input type="email" name="email">
+  <input type="text" name="tracks">
+</form>
+<form name="notification-log" data-netlify="true" hidden>
+  <input type="hidden" name="key">
+</form>
+
 <script>
 (function(){
   // ---------- countdown ----------
@@ -663,6 +686,22 @@ footer{padding:48px 0 64px;}
   document.getElementById('search').addEventListener('input', function(e){ render(currentTrack, e.target.value); });
   render("all","");
 
+  // ---------- Netlify Forms helper: real, shared, server-side storage ----------
+  // No custom backend needed for writes — Netlify captures any POST to "/"
+  // whose body names a registered form. The matching hidden <form> elements
+  // near the end of the page are what let Netlify register each form's schema.
+  function netlifyFormSubmit(name, fields){
+    var data = Object.assign({'form-name': name}, fields);
+    var body = Object.keys(data).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+    return fetch('/', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: body
+    });
+  }
+
   // ---------- concierge form: real signup, saved server-side ----------
   document.getElementById('concierge-form').addEventListener('submit', function(e){
     e.preventDefault();
@@ -681,19 +720,15 @@ footer{padding:48px 0 64px;}
       return;
     }
     btn.disabled = true;
-    fetch('/.netlify/functions/concierge-signup', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({name: name, email: email, tracks: tracks})
-    }).then(function(r){ return r.json().then(function(data){ return {ok: r.ok, data: data}; }); })
-      .then(function(res){
+    netlifyFormSubmit('concierge-optin', {name: name, email: email, tracks: tracks.join('|')})
+      .then(function(r){
         btn.disabled = false;
-        if(res.ok && res.data && res.data.ok){
+        if(r.ok){
           msg.textContent = "You're in — pings start Oct 5.";
           form.reset();
           form.querySelectorAll('.check-pill input')[0].checked = true;
         } else {
-          msg.textContent = (res.data && res.data.error) || "Something went wrong — try again.";
+          msg.textContent = "Something went wrong — try again.";
         }
         msg.classList.add('show');
       }).catch(function(){
@@ -739,17 +774,13 @@ footer{padding:48px 0 64px;}
         var id = btn.getAttribute('data-id');
         if(myVotes[id]) return;
         btn.disabled = true;
-        fetch('/.netlify/functions/wall-vote', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({id: id, voterId: voterId})
-        }).then(function(r){ return r.json(); }).then(function(res){
+        netlifyFormSubmit('wall-vote', {targetId: id, voterId: voterId}).then(function(r){
           btn.disabled = false;
-          if(res && res.ok){
+          if(r.ok){
             myVotes[id] = true;
             try { localStorage.setItem('cw_my_votes', JSON.stringify(myVotes)); } catch(e){}
             var entry = wallEntries.filter(function(e2){ return e2.id === id; })[0];
-            if(entry && res.entry) entry.votes = res.entry.votes;
+            if(entry) entry.votes += 1;
             renderWall();
           }
         }).catch(function(){ btn.disabled = false; });
@@ -800,26 +831,22 @@ footer{padding:48px 0 64px;}
     var btn = form.querySelector('button[type="submit"]');
     msg.classList.remove('show');
     btn.disabled = true;
-    fetch('/.netlify/functions/wall-submit', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        obvious: document.getElementById('wf-obvious').value,
-        signal: document.getElementById('wf-signal').value,
-        anonymous: anon,
-        name: document.getElementById('wf-name').value,
-        company: document.getElementById('wf-co').value
-      })
-    }).then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
-      .then(function(res){
+    var obvious = document.getElementById('wf-obvious').value.trim();
+    var signal = document.getElementById('wf-signal').value.trim();
+    var name = document.getElementById('wf-name').value.trim();
+    var company = document.getElementById('wf-co').value.trim();
+    var who = anon ? "Submitted anonymously" : [name || "Someone", company].filter(Boolean).join(' · ');
+    var id = 'sub_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+    netlifyFormSubmit('wall-submission', {id: id, obvious: obvious, signal: signal, who: who, anonymous: anon ? 'true' : 'false'})
+      .then(function(r){
         btn.disabled = false;
-        if(res.ok && res.data && res.data.ok){
-          wallEntries.unshift(res.data.entry);
+        if(r.ok){
+          wallEntries.unshift({id: id, obvious: obvious, signal: signal, who: who, votes: 0});
           renderWall();
           msg.textContent = "Posted — it's live on the wall below.";
           form.reset();
         } else {
-          msg.textContent = (res.data && res.data.error) || "Something went wrong — try again.";
+          msg.textContent = "Something went wrong — try again.";
         }
         msg.classList.add('show');
       }).catch(function(){

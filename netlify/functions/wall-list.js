@@ -1,28 +1,44 @@
-const { store } = require("./lib/store");
+const { getFormSubmissionsByName } = require("./lib/netlify-api");
 
 exports.handler = async function () {
-  const wallStore = store("wall");
-  const { blobs } = await wallStore.list();
+  try {
+    const [submissions, votes] = await Promise.all([
+      getFormSubmissionsByName("wall-submission"),
+      getFormSubmissionsByName("wall-vote"),
+    ]);
 
-  const entries = await Promise.all(
-    blobs.map((b) => wallStore.get(b.key, { type: "json" }))
-  );
+    const voteCounts = {};
+    for (const v of votes) {
+      const targetId = v.data && v.data.targetId;
+      if (!targetId) continue;
+      voteCounts[targetId] = (voteCounts[targetId] || 0) + 1;
+    }
 
-  const clean = entries
-    .filter(Boolean)
-    .map((e) => ({
-      id: e.id,
-      obvious: e.obvious,
-      signal: e.signal,
-      who: e.who,
-      votes: e.votes || 0,
-      createdAt: e.createdAt,
-    }))
-    .sort((a, b) => (b.votes - a.votes) || (new Date(b.createdAt) - new Date(a.createdAt)));
+    const seen = new Set();
+    const entries = [];
+    for (const s of submissions) {
+      const d = s.data || {};
+      const id = d.id;
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      entries.push({
+        id,
+        obvious: d.obvious || "",
+        signal: d.signal || "",
+        who: d.who || "Submitted anonymously",
+        votes: voteCounts[id] || 0,
+        createdAt: s.created_at,
+      });
+    }
 
-  return {
-    statusCode: 200,
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
-    body: JSON.stringify({ ok: true, entries: clean }),
-  };
+    entries.sort((a, b) => b.votes - a.votes || new Date(b.createdAt) - new Date(a.createdAt));
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+      body: JSON.stringify({ ok: true, entries }),
+    };
+  } catch (err) {
+    return { statusCode: 500, body: JSON.stringify({ ok: false, error: err.message }) };
+  }
 };

@@ -7,7 +7,7 @@
 // Session times in sessions.json are Denver wall-clock times, so we convert
 // by adding 6 hours to get UTC.
 
-const { store } = require("./lib/store");
+const { getFormSubmissionsByName, submitForm } = require("./lib/netlify-api");
 const { sendMail } = require("./lib/mailer");
 const sessions = require("./data/sessions.json");
 
@@ -34,21 +34,34 @@ function inWindow(target, now) {
 }
 
 async function getOptedInEmails(track) {
-  const optins = store("optins");
-  const { blobs } = await optins.list();
-  const docs = await Promise.all(blobs.map((b) => optins.get(b.key, { type: "json" })));
-  return docs.filter(Boolean).filter((d) => (d.tracks || []).includes(track));
+  const submissions = await getFormSubmissionsByName("concierge-optin");
+  // Keep only the latest signup per email (people can update their track picks).
+  const latestByEmail = new Map();
+  for (const s of submissions) {
+    const d = s.data || {};
+    if (!d.email) continue;
+    const prev = latestByEmail.get(d.email);
+    if (!prev || new Date(s.created_at) > new Date(prev.created_at)) {
+      latestByEmail.set(d.email, { ...d, created_at: s.created_at });
+    }
+  }
+  return Array.from(latestByEmail.values()).filter((d) =>
+    (d.tracks || "").split("|").includes(track)
+  );
 }
 
+let notifiedCache = null;
 async function alreadyNotified(key) {
-  const notified = store("notified");
-  const v = await notified.get(key);
-  return !!v;
+  if (!notifiedCache) {
+    const submissions = await getFormSubmissionsByName("notification-log");
+    notifiedCache = new Set(submissions.map((s) => s.data && s.data.key).filter(Boolean));
+  }
+  return notifiedCache.has(key);
 }
 
 async function markNotified(key) {
-  const notified = store("notified");
-  await notified.set(key, "1");
+  await submitForm("notification-log", { key });
+  if (notifiedCache) notifiedCache.add(key);
 }
 
 exports.handler = async function () {
