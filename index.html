@@ -261,6 +261,13 @@ details[open] > .day-summary .chevron{transform:rotate(90deg);}
   display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;
 }
 @media (max-width:780px){.contrarian-hero{grid-template-columns:1fr;}}
+.prize-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:10px;}
+@media (max-width:780px){.prize-tiers{grid-template-columns:1fr;}}
+.prize-tier{background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:20px;}
+.prize-label{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--wall-accent-ink);}
+.prize-amount{font-family:'Lora',serif;font-weight:700;font-size:1.5rem;color:var(--ink);margin-top:6px;}
+.prize-desc{font-size:0.82rem;color:var(--ink-soft);line-height:1.5;margin-top:10px;}
+.prize-note{font-size:0.76rem;color:var(--ink-faint);margin:0 0 32px;line-height:1.5;max-width:70ch;}
 .claim-obvious{font-family:'Lora',serif;font-style:italic;font-size:1.15rem;color:var(--consensus);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--consensus);line-height:1.4;}
 .claim-signal{font-family:'Lora',serif;font-weight:600;font-size:1.35rem;color:var(--wall-accent-ink);margin-top:14px;line-height:1.3;}
 .claim-attr{font-size:0.8rem;color:var(--ink-faint);margin-top:14px;font-family:'IBM Plex Mono',monospace;}
@@ -478,6 +485,25 @@ footer{padding:48px 0 64px;}
         <li>Open now through the submission deadline before TMRE — winners revealed on-site</li>
       </ul>
     </div>
+
+    <div class="prize-tiers">
+      <div class="prize-tier">
+        <div class="prize-label">Grand Prize</div>
+        <div class="prize-amount">$1,000</div>
+        <div class="prize-desc">Winner's choice — a $1,000 donation to a charity of their choice, or a $1,000 travel credit toward an industry conference of their choice.</div>
+      </div>
+      <div class="prize-tier">
+        <div class="prize-label">People's Choice</div>
+        <div class="prize-amount">$250</div>
+        <div class="prize-desc">Same choice, smaller scale — for the entry with the most public votes, if it isn't already the Grand Prize winner.</div>
+      </div>
+      <div class="prize-tier">
+        <div class="prize-label">Jury's Pick</div>
+        <div class="prize-amount">Recognition</div>
+        <div class="prize-desc">A feature in Convosight's content and a shoutout at TMRE, for the entry the jury found most original — win or not.</div>
+      </div>
+    </div>
+    <p class="prize-note">Prizes structured as charitable donations or professional-development travel credit, not direct cash or gifts, to stay clear of most employers' gift-acceptance caps.</p>
 
     <form class="submit-form" id="wall-form">
       <h3>Submit your contrarian insight</h3>
