@@ -47,6 +47,8 @@ button{
       <div class="field"><label for="sessionTitle">Session title</label><input type="text" id="sessionTitle" name="sessionTitle" placeholder="Exactly as it appears on the agenda" required></div>
       <div class="field"><label for="recording">Recording file</label><input type="file" id="recording" name="recording" accept="audio/*,video/*" required></div>
       <div class="field"><label for="notes">Notes (optional)</label><textarea id="notes" name="notes" placeholder="Anything useful for the summary — who spoke, key moments, etc."></textarea></div>
+      <input type="hidden" name="recordingUrl" value="">
+      <input type="hidden" name="source" value="manual-upload">
       <button type="submit">Upload</button>
     </form>
   </div>
