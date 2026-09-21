@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<title>Contrarian Wall — Jury</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F3F0E7; --paper-raised:#FFFFFF; --ink:#14231C; --ink-soft:#4B5A50; --ink-faint:#8B9289;
+  --line:rgba(20,35,28,0.14); --line-soft:rgba(20,35,28,0.08);
+  --signal:#00C389; --signal-ink:#067355; --signal-soft:#DFF7EE;
+  --wall-accent:#6C5CE7; --wall-accent-ink:#5541D6; --wall-accent-soft:#EDEBFB;
+  --warn:#B8792B; --warn-soft:#F5E9D8;
+  --shadow:0 1px 2px rgba(20,35,28,0.06), 0 8px 24px -12px rgba(20,35,28,0.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F2A20; --paper-raised:#163C2C; --ink:#F3F0E7; --ink-soft:#C9CDBE; --ink-faint:#8FA294;
+    --line:rgba(243,240,231,0.14); --line-soft:rgba(243,240,231,0.07);
+    --signal:#3DD9A6; --signal-ink:#B9F0D3; --signal-soft:rgba(61,217,166,0.14);
+    --wall-accent:#A78BFA; --wall-accent-ink:#D9CCFF; --wall-accent-soft:rgba(167,139,250,0.16);
+    --warn:#E0AD68; --warn-soft:rgba(224,173,104,0.14);
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F2A20; --paper-raised:#163C2C; --ink:#F3F0E7; --ink-soft:#C9CDBE; --ink-faint:#8FA294;
+  --line:rgba(243,240,231,0.14); --line-soft:rgba(243,240,231,0.07);
+  --signal:#3DD9A6; --signal-ink:#B9F0D3; --signal-soft:rgba(61,217,166,0.14);
+  --wall-accent:#A78BFA; --wall-accent-ink:#D9CCFF; --wall-accent-soft:rgba(167,139,250,0.16);
+  --warn:#E0AD68; --warn-soft:rgba(224,173,104,0.14);
+  --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;margin:0;text-wrap:balance;}
+.wrap{max-width:880px;margin:0 auto;padding:32px 24px 80px;}
+
+/* ---- gate ---- */
+#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.gate-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:32px;max-width:380px;width:100%;box-shadow:var(--shadow);}
+.gate-card h1{font-size:1.3rem;margin-bottom:8px;}
+.gate-card p{font-size:0.88rem;color:var(--ink-soft);margin:0 0 20px;line-height:1.5;}
+.gate-card input{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:0.92rem;outline:none;margin-bottom:12px;}
+.gate-card input:focus{border-color:var(--wall-accent);}
+.gate-err{font-size:0.82rem;color:var(--warn);margin:-4px 0 12px;display:none;}
+.gate-err.show{display:block;}
+
+/* ---- shared ---- */
+.btn{font-family:'Inter',sans-serif;font-weight:600;font-size:0.88rem;border-radius:9px;padding:10px 18px;border:1px solid transparent;cursor:pointer;transition:transform .1s;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--wall-accent);color:#fff;width:100%;}
+:root[data-theme="dark"] .btn-primary{color:#1A1030;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary{color:#1A1030;}}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--wall-accent);color:var(--wall-accent-ink);}
+.btn-small{font-size:0.8rem;padding:7px 14px;}
+
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:28px;flex-wrap:wrap;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--wall-accent-ink);background:var(--wall-accent-soft);border-radius:100px;padding:5px 12px;display:inline-block;margin-bottom:10px;}
+h1.title{font-size:1.7rem;}
+.judge-chip{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--ink-soft);background:var(--paper-raised);border:1px solid var(--line);border-radius:100px;padding:6px 14px;white-space:nowrap;}
+.judge-chip b{color:var(--ink);}
+.judge-chip button{background:none;border:none;color:var(--wall-accent-ink);font-size:0.8rem;cursor:pointer;font-family:inherit;padding:0;}
+
+.tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--line);}
+.tab{font-family:'Inter',sans-serif;font-weight:600;font-size:0.88rem;padding:10px 4px;margin-right:20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--ink-faint);cursor:pointer;}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--wall-accent);}
+
+.sec-note{font-size:0.85rem;color:var(--ink-soft);margin-bottom:22px;line-height:1.5;max-width:60ch;}
+.warn-note{background:var(--warn-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:0.8rem;color:var(--ink-soft);margin-bottom:22px;}
+
+/* ---- score cards ---- */
+.entry-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px;}
+.entry-card .obvious{font-family:'Lora',serif;font-style:italic;font-size:0.95rem;color:var(--ink-faint);text-decoration:line-through;line-height:1.45;}
+.entry-card .signal{font-family:'Lora',serif;font-weight:600;font-size:1.05rem;color:var(--ink);margin-top:8px;line-height:1.4;}
+.entry-card .who{font-size:0.78rem;color:var(--ink-faint);margin-top:10px;font-family:'IBM Plex Mono',monospace;}
+.score-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft);}
+.score-group label{display:block;font-size:0.76rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);margin-bottom:8px;}
+.score-buttons{display:flex;gap:6px;}
+.score-buttons button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:0.85rem;cursor:pointer;}
+.score-buttons button[aria-pressed="true"]{background:var(--wall-accent);border-color:var(--wall-accent);color:#fff;}
+.entry-foot{display:flex;align-items:center;gap:14px;margin-top:16px;}
+.saved-tag{font-size:0.8rem;color:var(--signal-ink);display:none;align-items:center;gap:6px;}
+.saved-tag.show{display:flex;}
+.saved-tag::before{content:"✓";}
+.entry-foot .btn-primary{width:auto;}
+
+/* ---- standings ---- */
+.standings-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+.standings-table th{text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);padding:8px 10px;border-bottom:1px solid var(--line);}
+.standings-table td{padding:12px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+.standings-table .rank{font-family:'IBM Plex Mono',monospace;color:var(--ink-faint);}
+.standings-table .claim{font-family:'Lora',serif;font-weight:600;max-width:340px;}
+.standings-table .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+.standings-table .blended{color:var(--wall-accent-ink);font-weight:700;}
+.pending{color:var(--ink-faint);font-style:italic;}
+.empty-state{padding:40px 20px;text-align:center;color:var(--ink-faint);font-size:0.9rem;}
+</style>
+
+<div id="gate">
+  <div class="gate-card">
+    <h1>Jury access</h1>
+    <p>Internal tool for Contrarian Wall judging. Ask the Convosight team for the access phrase if you don't have it.</p>
+    <input type="password" id="gate-input" placeholder="Access phrase" autocomplete="off">
+    <div class="gate-err" id="gate-err">That's not it — try again.</div>
+    <button class="btn btn-primary" id="gate-submit">Enter</button>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
+  <header>
+    <div>
+      <span class="eyebrow">Internal · Contrarian Wall</span>
+      <h1 class="title">Jury scoring</h1>
+    </div>
+    <div class="judge-chip">
+      Judging as <b id="judge-display">—</b>
+      <button id="change-judge">change</button>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" id="tab-score" role="tab" aria-selected="true">Score entries</button>
+    <button class="tab" id="tab-standings" role="tab" aria-selected="false">Standings</button>
+  </div>
+
+  <div id="panel-score">
+    <p class="sec-note">Score each entry on <b>originality</b> (does it actually contradict the obvious read?) and <b>evidence</b> (is the sharper insight backed up?), 1–5 each. Public vote counts are hidden here on purpose, so scores aren't anchored by what's already popular.</p>
+    <div id="entry-list"></div>
+  </div>
+
+  <div id="panel-standings" style="display:none;">
+    <div class="warn-note">Internal only — this is the blended ranking (jury 50% + public vote 50%) that gets announced live at TMRE. Don't share externally before then.</div>
+    <div id="standings-wrap"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var ACCESS_PHRASE = "tmre-jury-2026"; // change this before sharing the link with the jury
+
+  var gate = document.getElementById('gate');
+  var app = document.getElementById('app');
+  var gateInput = document.getElementById('gate-input');
+  var gateErr = document.getElementById('gate-err');
+
+  function tryEnter(){
+    if(gateInput.value.trim() === ACCESS_PHRASE){
+      try { sessionStorage.setItem('jury_gate_ok', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+      init();
+    } else {
+      gateErr.classList.add('show');
+    }
+  }
+  document.getElementById('gate-submit').addEventListener('click', tryEnter);
+  gateInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryEnter(); });
+
+  var alreadyIn = false;
+  try { alreadyIn = sessionStorage.getItem('jury_gate_ok') === '1'; } catch(e){}
+  if(alreadyIn){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+    init();
+  }
+
+  function netlifyFormSubmit(name, fields){
+    var data = Object.assign({'form-name': name}, fields);
+    var body = Object.keys(data).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+    return fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body });
+  }
+
+  var initialized = false;
+  function init(){
+    if(initialized) return;
+    initialized = true;
+
+    var judgeName = '';
+    try { judgeName = localStorage.getItem('jury_judge_name') || ''; } catch(e){}
+    if(!judgeName){
+      judgeName = (prompt('Your name, for attributing your scores:') || '').trim();
+      try { localStorage.setItem('jury_judge_name', judgeName); } catch(e){}
+    }
+    document.getElementById('judge-display').textContent = judgeName || 'Unnamed judge';
+
+    document.getElementById('change-judge').addEventListener('click', function(){
+      var next = (prompt('Your name:', judgeName) || '').trim();
+      if(next){
+        judgeName = next;
+        try { localStorage.setItem('jury_judge_name', judgeName); } catch(e){}
+        document.getElementById('judge-display').textContent = judgeName;
+      }
+    });
+
+    var tabScore = document.getElementById('tab-score');
+    var tabStandings = document.getElementById('tab-standings');
+    var panelScore = document.getElementById('panel-score');
+    var panelStandings = document.getElementById('panel-standings');
+    tabScore.addEventListener('click', function(){
+      tabScore.setAttribute('aria-selected','true'); tabStandings.setAttribute('aria-selected','false');
+      panelScore.style.display = 'block'; panelStandings.style.display = 'none';
+    });
+    tabStandings.addEventListener('click', function(){
+      tabStandings.setAttribute('aria-selected','true'); tabScore.setAttribute('aria-selected','false');
+      panelStandings.style.display = 'block'; panelScore.style.display = 'none';
+      loadStandings();
+    });
+
+    loadEntries(judgeName);
+  }
+
+  function loadEntries(judgeName){
+    var list = document.getElementById('entry-list');
+    Promise.all([
+      fetch('/.netlify/functions/wall-list').then(function(r){ return r.json(); }),
+      fetch('/.netlify/functions/jury-standings').then(function(r){ return r.json(); }).catch(function(){ return {standings:[]}; })
+    ]).then(function(results){
+      var wall = results[0];
+      var standings = results[1].standings || [];
+      var byId = {};
+      standings.forEach(function(s){ byId[s.id] = s; });
+
+      var entries = wall.entries || [];
+      if(!entries.length){
+        list.innerHTML = '<div class="empty-state">No submissions on the Wall yet — check back once entries start coming in.</div>';
+        return;
+      }
+      list.innerHTML = '';
+      entries.forEach(function(entry){
+        var card = document.createElement('div');
+        card.className = 'entry-card';
+        var mine = null;
+        var judgeEntry = (byId[entry.id] && byId[entry.id].judges || []).filter(function(j){
+          return j.judgeName.trim().toLowerCase() === judgeName.trim().toLowerCase();
+        })[0];
+        if(judgeEntry) mine = judgeEntry;
+
+        card.innerHTML =
+          '<div class="obvious">'+entry.obvious+'</div>'+
+          '<div class="signal">'+entry.signal+'</div>'+
+          '<div class="who">'+entry.who+'</div>'+
+          '<div class="score-row">'+
+            '<div class="score-group"><label>Originality</label><div class="score-buttons" data-dim="originality"></div></div>'+
+            '<div class="score-group"><label>Evidence</label><div class="score-buttons" data-dim="evidence"></div></div>'+
+          '</div>'+
+          '<div class="entry-foot"><button class="btn btn-primary btn-small" type="button">Save score</button><span class="saved-tag">Saved</span></div>';
+
+        ['originality','evidence'].forEach(function(dim){
+          var group = card.querySelector('.score-buttons[data-dim="'+dim+'"]');
+          for(var i=1;i<=5;i++){
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = i;
+            b.setAttribute('data-val', i);
+            b.setAttribute('aria-pressed', mine && mine[dim] === i ? 'true' : 'false');
+            (function(btn, dimension){
+              btn.addEventListener('click', function(){
+                group.querySelectorAll('button').forEach(function(o){ o.setAttribute('aria-pressed','false'); });
+                btn.setAttribute('aria-pressed','true');
+              });
+            })(b, dim);
+            group.appendChild(b);
+          }
+        });
+
+        var saveBtn = card.querySelector('.btn-primary');
+        var savedTag = card.querySelector('.saved-tag');
+        if(mine) savedTag.classList.add('show');
+
+        saveBtn.addEventListener('click', function(){
+          var origBtn = card.querySelector('.score-buttons[data-dim="originality"] button[aria-pressed="true"]');
+          var evidBtn = card.querySelector('.score-buttons[data-dim="evidence"] button[aria-pressed="true"]');
+          if(!origBtn || !evidBtn){
+            alert('Pick a score for both Originality and Evidence first.');
+            return;
+          }
+          if(!judgeName){
+            alert('Enter your name first (use "change" up top).');
+            return;
+          }
+          saveBtn.disabled = true;
+          netlifyFormSubmit('jury-score', {
+            submissionId: entry.id,
+            judgeName: judgeName,
+            originality: origBtn.getAttribute('data-val'),
+            evidence: evidBtn.getAttribute('data-val')
+          }).then(function(r){
+            saveBtn.disabled = false;
+            if(r.ok){ savedTag.classList.add('show'); }
+            else { alert('Something went wrong saving that score — try again.'); }
+          }).catch(function(){
+            saveBtn.disabled = false;
+            alert("Couldn't reach the server — try again in a moment.");
+          });
+        });
+
+        list.appendChild(card);
+      });
+    }).catch(function(){
+      list.innerHTML = '<div class="empty-state">Couldn\'t load submissions — refresh to try again.</div>';
+    });
+  }
+
+  function loadStandings(){
+    var wrap = document.getElementById('standings-wrap');
+    wrap.innerHTML = '<div class="empty-state">Loading…</div>';
+    fetch('/.netlify/functions/jury-standings').then(function(r){ return r.json(); }).then(function(data){
+      var standings = data.standings || [];
+      if(!standings.length){
+        wrap.innerHTML = '<div class="empty-state">No submissions yet.</div>';
+        return;
+      }
+      var rows = standings.map(function(s, i){
+        return '<tr>'+
+          '<td class="rank">'+(i+1)+'</td>'+
+          '<td class="claim">'+s.signal+'<div style="font-weight:400;color:var(--ink-faint);font-size:0.78rem;margin-top:4px;">'+s.who+'</div></td>'+
+          '<td class="num">'+s.votes+'</td>'+
+          '<td class="num">'+s.judgeCount+'</td>'+
+          '<td class="num">'+(s.juryScore100 === null ? '<span class="pending">pending</span>' : s.juryScore100)+'</td>'+
+          '<td class="num blended">'+(s.blended === null ? '<span class="pending">pending</span>' : s.blended)+'</td>'+
+        '</tr>';
+      }).join('');
+      wrap.innerHTML =
+        '<table class="standings-table"><thead><tr>'+
+        '<th>#</th><th>Entry</th><th>Public votes</th><th>Judges</th><th>Jury score /100</th><th>Blended</th>'+
+        '</tr></thead><tbody>'+rows+'</tbody></table>';
+    }).catch(function(){
+      wrap.innerHTML = '<div class="empty-state">Couldn\'t load standings — refresh to try again.</div>';
+    });
+  }
+})();
+</script>
