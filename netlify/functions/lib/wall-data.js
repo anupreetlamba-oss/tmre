@@ -8,10 +8,18 @@ async function getWallEntries() {
     getFormSubmissionsByName("wall-vote"),
   ]);
 
+  // One vote per (voterId, targetId) pair, no matter how many times it's
+  // submitted — closes the gap where the vote-disable state was purely
+  // client-side and the server counted every submission unconditionally.
+  const seenVotes = new Set();
   const voteCounts = {};
   for (const v of votes) {
     const targetId = v.data && v.data.targetId;
+    const voterId = (v.data && v.data.voterId) || v.id; // fall back to submission id if voterId is missing
     if (!targetId) continue;
+    const key = targetId + "::" + voterId;
+    if (seenVotes.has(key)) continue;
+    seenVotes.add(key);
     voteCounts[targetId] = (voteCounts[targetId] || 0) + 1;
   }
 
